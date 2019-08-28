@@ -2,7 +2,7 @@
 
 defined('_JEXEC') or die('Direct Access to ' . basename(__FILE__) . ' is not allowed.');
 
-use Ingpsp\Lib\IngpspVmPaymentPlugin;
+use Emspay\Lib\EmspayVmPaymentPlugin;
 
 /**
  *   ╲          ╱
@@ -28,11 +28,11 @@ if (!class_exists('vmPSPlugin')) {
     require(VMPATH_PLUGINLIBS . DS . 'vmpsplugin.php');
 }
 
-JLoader::registerNamespace('Ingpsp', JPATH_LIBRARIES . '/ingpsp');
-JImport('ingpsp.ing-php.vendor.autoload');
-JImport('ingpsp.ingpsphelper');
+JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
+JImport('emspay.ems-php.vendor.autoload');
+JImport('emspay.emspayhelper');
 
-class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
+class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
 {
     const TERMS_CONDITION_URL_NL = 'https://www.afterpay.nl/nl/algemeen/betalen-met-afterpay/betalingsvoorwaarden';
     const TERMS_CONDITION_URL_BE = 'https://www.afterpay.be/be/footer/betalen-met-afterpay/betalingsvoorwaarden';
@@ -154,20 +154,20 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
      */
     public function customInfoHTML($country)
     {
-        $html = JText::_('PLG_VMPAYMENT_INGPSPAFTERPAY_MESSAGE_SELECT_GENDER') . ' <br/>';
+        $html = JText::_('PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_SELECT_GENDER') . ' <br/>';
         $html .= '<select name="gender" id="' . $this->name . '" class="' . $this->name . '">';
         $html .= '<option value="male" '
-                . (JFactory::getSession()->get('ingpspafterpay_gender') == 'male' ? " selected" : "") . '>'
-                . JText::_('PLG_VMPAYMENT_INGPSPAFTERPAY_MESSAGE_SELECT_GENDER_MALE') . '</option>';
+                . (JFactory::getSession()->get('emspayafterpay_gender') == 'male' ? " selected" : "") . '>'
+                . JText::_('PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_SELECT_GENDER_MALE') . '</option>';
         $html .= '<option value="female" '
-                . (JFactory::getSession()->get('ingpspafterpay_gender') == 'male' ? " selected" : "") . '>'
-                . JText::_('PLG_VMPAYMENT_INGPSPAFTERPAY_MESSAGE_SELECT_GENDER_FEMALE') . '</option>';
+                . (JFactory::getSession()->get('emspayafterpay_gender') == 'male' ? " selected" : "") . '>'
+                . JText::_('PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_SELECT_GENDER_FEMALE') . '</option>';
         $html .= "</select><br/>";
-        $html .= JText::_('PLG_VMPAYMENT_INGPSPAFTERPAY_MESSAGE_ENTER_DOB') . '<br>';
-        $html .= '<input type="text" name="dob" value="' . JFactory::getSession()->get('ingpspafterpay_dob', null, 'vm') . '"/>';
-        $html .= '<i>('.JText::_("PLG_VMPAYMENT_INGPSPAFTERPAY_MESSAGE_DATE_FORMAT").')</i></br>'; 
-        $html .= '<input type="checkbox" name="terms_and_confditions" '.(JFactory::getSession()->get('ingpspafterpay_terms_and_confditions', null, 'vm')  == 'on' ?   'checked="checked"' : null).' />';
-        $html .= '<a href="'.$this->gettermsAndConditionsUrlByCountry($country).'" target="blank">'.JText::_("PLG_VMPAYMENT_INGPSPAFTERPAY_TERMS_AND_CONDITIONS").'</a>';
+        $html .= JText::_('PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_ENTER_DOB') . '<br>';
+        $html .= '<input type="text" name="dob" value="' . JFactory::getSession()->get('emspayafterpay_dob', null, 'vm') . '"/>';
+        $html .= '<i>('.JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_DATE_FORMAT").')</i></br>';
+        $html .= '<input type="checkbox" name="terms_and_confditions" '.(JFactory::getSession()->get('emspayafterpay_terms_and_confditions', null, 'vm')  == 'on' ?   'checked="checked"' : null).' />';
+        $html .= '<a href="'.$this->gettermsAndConditionsUrlByCountry($country).'" target="blank">'.JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_TERMS_AND_CONDITIONS").'</a>';
         return $html;
     }
     
@@ -187,7 +187,7 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
      */
     public function displayWarningHtml()
     {
-        return JText::_('PLG_VMPAYMENT_INGPSPAFTERPAY_MESSAGE_AFTERPAY_INTENDED_TO_BE_USED') . ' <br/>';
+        return JText::_('PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_AFTERPAY_INTENDED_TO_BE_USED') . ' <br/>';
     }
             
     /**
@@ -208,17 +208,17 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
         }
         
         $app = JFactory::getApplication();
-        $dob = $app->getSession()->get('ingpspafterpay_dob', null, 'vm');
+        $dob = $app->getSession()->get('emspayafterpay_dob', null, 'vm');
         if ($this->isValidDate($dob) === false) {
-            $app->enqueueMessage(JText::_("PLG_VMPAYMENT_INGPSPAFTERPAY_MESSAGE_INVALID_DATE_ERROR"), 'error');
-            $app->getSession()->clear('ingpspafterpay_dob', 'vm');
+            $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_INVALID_DATE_ERROR"), 'error');
+            $app->getSession()->clear('emspayafterpay_dob', 'vm');
             $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
         }
-        $tc = $app->getSession()->get('ingpspafterpay_terms_and_confditions', null, 'vm');
+        $tc = $app->getSession()->get('emspayafterpay_terms_and_confditions', null, 'vm');
         if ($tc != 'on') {
-            $app->enqueueMessage(JText::_("PLG_VMPAYMENT_INGPSPAFTERPAY_MESSAGE_PLEASE_ACCEPT_TC"), 'error');
-            $app->getSession()->clear('ingpspafterpay_terms_and_confditions', 'vm');
+            $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_PLEASE_ACCEPT_TC"), 'error');
+            $app->getSession()->clear('emspayafterpay_terms_and_confditions', 'vm');
             $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
         }
@@ -243,9 +243,9 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
         if (!($currentMethod = $this->getVmPluginMethod($cart->virtuemart_paymentmethod_id))) {
             return false;
         }
-        JFactory::getSession()->set('ingpspafterpay_gender', vRequest::getVar('gender'), 'vm');
-        JFactory::getSession()->set('ingpspafterpay_dob', vRequest::getVar('dob'), 'vm');
-        JFactory::getSession()->set('ingpspafterpay_terms_and_confditions', vRequest::getVar('terms_and_confditions'), 'vm');
+        JFactory::getSession()->set('emspayafterpay_gender', vRequest::getVar('gender'), 'vm');
+        JFactory::getSession()->set('emspayafterpay_dob', vRequest::getVar('dob'), 'vm');
+        JFactory::getSession()->set('emspayafterpay_terms_and_confditions', vRequest::getVar('terms_and_confditions'), 'vm');
 
         return true;
     }
@@ -324,18 +324,18 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
             }
         }
 
-        $totalInCents = IngpspHelper::getAmountInCents($totalInPaymentCurrency['value']);
+        $totalInCents = EmspayHelper::getAmountInCents($totalInPaymentCurrency['value']);
         $orderId = $order['details']['BT']->virtuemart_order_id;
-        $description = IngpspHelper::getOrderDescription($orderId);
-        $customer = \Ingpsp\Lib\CommonCustomerFactory::create(
+        $description = EmspayHelper::getOrderDescription($orderId);
+        $customer = \Emspay\Lib\CommonCustomerFactory::create(
                         $order['details']['BT'],
-                        \IngpspHelper::getLocale(),
+                        \EmspayHelper::getLocale(),
                         \JFactory::getApplication()->input->server->get('REMOTE_ADDR'),
-                        \JFactory::getSession()->get('ingpspafterpay_gender', null, 'vm'),
-                        $this->convertDateToAcceptedFormat(\JFactory::getSession()->get('ingpspafterpay_dob', null, 'vm'))
+                        \JFactory::getSession()->get('emspayafterpay_gender', null, 'vm'),
+                        $this->convertDateToAcceptedFormat(\JFactory::getSession()->get('emspayafterpay_dob', null, 'vm'))
         );
 
-        $plugin = ['plugin' => IngpspHelper::getPluginVersion($this->_name)];
+        $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
         $orderLines = $this->getOrderLines($cart, $currency_code_3);
 
@@ -353,17 +353,17 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
                     $orderLines
             );
         } catch (\Exception $exception) {
-            $html = "<p>" . JText::_("INGPSP_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$exception->getMessage()."</p>";
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$exception->getMessage()."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
         if ($response->status()->isError()) {
-            $html = "<p>" . JText::_("INGPSP_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response->transactions()->current()->reason()->toString()."</p>";
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response->transactions()->current()->reason()->toString()."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
         if (!$response->getId()) {
-            $html = "<p>" . JText::_("INGPSP_LIB_ERROR_TRANSACTION") . "</p><p>Error: Response did not include id!</p>";
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: Response did not include id!</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
@@ -385,18 +385,18 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
 
         $statusSucceeded = $this->updateOrder($response->getStatus(), $virtuemart_order_id);
 
-        $html = "<p>" . IngpspHelper::getOrderDescription($virtuemart_order_id) . "</p>";
+        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>";
         if ($statusSucceeded) {
             $this->clearSessionData();
             $this->emptyCart(null, $virtuemart_order_id);
-            $html .= "<p>". JText::_('INGPSP_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
+            $html .= "<p>". JText::_('EMSPAY_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
             vRequest::setVar('html', $html);
             return true;
         }
         
-        $html .= "<p>" . JText::_("INGPSP_LIB_ERROR_STATUS") . "</p>";
+        $html .= "<p>" . JText::_("EMSPAY_LIB_ERROR_STATUS") . "</p>";
         if ($response->getStatus()) {
-            $html .= "<p>" . JText::_("INGPSP_AFTERPAY_CANCELLED_STATUS_MSG") . "</p>";
+            $html .= "<p>" . JText::_("EMSPAY_AFTERPAY_CANCELLED_STATUS_MSG") . "</p>";
         }
          
         $this->processFalseOrderStatusResponse($html);
@@ -433,10 +433,10 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
             $orderLines[] = array_filter([
                 'name' => $product->product_name,
                 'type' => \GingerPayments\Payment\Order\OrderLine\Type::PHYSICAL,
-                'amount' => IngpspHelper::getAmountInCents($product->prices['salesPrice']),
+                'amount' => EmspayHelper::getAmountInCents($product->prices['salesPrice']),
                 'currency' => $currency_code_3,
                 'quantity' => $product->quantity,
-                'vat_percentage' => IngpspHelper::getAmountInCents($this->caclucalteVatTax($product->prices['VatTax'])),
+                'vat_percentage' => EmspayHelper::getAmountInCents($this->caclucalteVatTax($product->prices['VatTax'])),
                 'merchant_order_line_id' => $product->virtuemart_product_id
                     ], function ($var) {
                         return !is_null($var);
@@ -447,9 +447,9 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
             $orderLines[] = array_filter([
                 'name' => isset($cart->cartData['shipmentName']) ? $cart->cartData['shipmentName'] : '',
                 'type' => \GingerPayments\Payment\Order\OrderLine\Type::SHIPPING_FEE,
-                'amount' => IngpspHelper::getAmountInCents($cart->cartPrices['salesPriceShipment']),
+                'amount' => EmspayHelper::getAmountInCents($cart->cartPrices['salesPriceShipment']),
                 'currency' => \GingerPayments\Payment\Currency::EUR,
-                'vat_percentage' => IngpspHelper::getAmountInCents(isset($cart->cartPrices[0]['VatTax']) ? $this->caclucalteVatTax($cart->cartPrices[0]['VatTax']) : 0),
+                'vat_percentage' => EmspayHelper::getAmountInCents(isset($cart->cartPrices[0]['VatTax']) ? $this->caclucalteVatTax($cart->cartPrices[0]['VatTax']) : 0),
                 'merchant_order_line_id' => $cart->virtuemart_shipmentmethod_id,
                 'quantity' => 1], function ($var) {
                     return !is_null($var);
@@ -485,9 +485,9 @@ class plgVmPaymentIngpspafterpay extends IngpspVmPaymentPlugin
     protected function clearSessionData()
     {
         $session = JFactory::getSession();
-        $session->set('ingpspafterpay_gender', null, 'vm');
-        $session->set('ingpspafterpay_dob', null, 'vm');
-        $session->set('ingpspafterpay_terms_and_confditions', null, 'vm');
+        $session->set('emspayafterpay_gender', null, 'vm');
+        $session->set('emspayafterpay_dob', null, 'vm');
+        $session->set('emspayafterpay_terms_and_confditions', null, 'vm');
     }
     
     /**
