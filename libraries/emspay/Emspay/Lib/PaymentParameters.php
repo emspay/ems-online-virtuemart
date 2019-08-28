@@ -1,6 +1,6 @@
 <?php
 
-namespace Ingpsp\Lib;
+namespace Emspay\Lib;
 
 /**
  * Paymentparameters
@@ -11,27 +11,27 @@ class PaymentParameters
 {
 
     public static $mapping = [
-        'INGPSP_API_KEY' => 'apiKey',
-        'INGPSP_LIB_BUNDLE_CA_CERT' => 'bundleCaCert',
-        'INGPSP_LIB_PRODUCT' => 'ingPspProduct',
-        'INGPSP_ALLOW_NOTIFICATIONS_FROM_X' => 'allowNotification',
-        'INGPSP_STATUS_NEW' => 'statusNew',
-        'INGPSP_STATUS_PENDING' => 'statusPending',
-        'INGPSP_STATUS_PROCESSING' => 'statusProcessing',
-        'INGPSP_STATUS_ERROR' => 'statusError',
-        'INGPSP_STATUS_COMPLETED' => 'statusCompleted',
-        'INGPSP_STATUS_CANCELED' => 'statusCanceled',
-        'INGPSP_STATUS_EXPIRED' => 'statusExpired',
-        'INGPSP_STATUS_ACCEPTED' => 'statusAccepted',
-        'INGPSP_STATUS_CAPTURED' => 'statusCaptured',
-        'INGPSP_ALLOWED_IP_ADDRESSES' => 'allowedIpAddresses',
-        'INGPSP_TEST_API_KEY' => 'testApiKey',
-        'INGPSP_AFTERPAY_TEST_APIKEY' => 'afterpayTestApiKey',
-        'INGPSP_ALLOWED_IP_ADDRESSES' => 'afterpayAllowedIpAddresses'
+        'EMSPAY_API_KEY' => 'apiKey',
+        'EMSPAY_LIB_BUNDLE_CA_CERT' => 'bundleCaCert',
+        'EMSPAY_LIB_PRODUCT' => 'emsPayProduct',
+        'EMSPAY_ALLOW_NOTIFICATIONS_FROM_X' => 'allowNotification',
+        'EMSPAY_STATUS_NEW' => 'statusNew',
+        'EMSPAY_STATUS_PENDING' => 'statusPending',
+        'EMSPAY_STATUS_PROCESSING' => 'statusProcessing',
+        'EMSPAY_STATUS_ERROR' => 'statusError',
+        'EMSPAY_STATUS_COMPLETED' => 'statusCompleted',
+        'EMSPAY_STATUS_CANCELED' => 'statusCanceled',
+        'EMSPAY_STATUS_EXPIRED' => 'statusExpired',
+        'EMSPAY_STATUS_ACCEPTED' => 'statusAccepted',
+        'EMSPAY_STATUS_CAPTURED' => 'statusCaptured',
+        'EMSPAY_ALLOWED_IP_ADDRESSES' => 'allowedIpAddresses',
+        'EMSPAY_TEST_API_KEY' => 'testApiKey',
+        'EMSPAY_AFTERPAY_TEST_APIKEY' => 'afterpayTestApiKey',
+        'EMSPAY_ALLOWED_IP_ADDRESSES' => 'afterpayAllowedIpAddresses'
     ];
     private $apiKey;
     private $bundleCaCert;
-    private $ingPspProduct;
+    private $emsPayProduct;
     private $allowNotification;
     private $statusNew;
     private $statusPending;
@@ -57,9 +57,9 @@ class PaymentParameters
         return boolval($this->bundleCaCert);
     }
 
-    public function ingPspProduct() 
+    public function emsPayProduct()
     {
-        return $this->ingPspProduct;
+        return $this->emsPayProduct;
     }
 
     public function allowNotification() 

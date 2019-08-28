@@ -1,5 +1,5 @@
 <?php
-namespace Ingpsp\Lib;
+namespace Emspay\Lib;
 
 /**
  * CommonCustomerFactory

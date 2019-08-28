@@ -1,8 +1,8 @@
 <?php
 
-namespace Ingpsp\Lib;
+namespace Emspay\Lib;
 
-use Ingpsp\Lib\PaymentParametersFactory;
+use Emspay\Lib\PaymentParametersFactory;
 
 /**
  *   ╲          ╱
@@ -23,7 +23,7 @@ use Ingpsp\Lib\PaymentParametersFactory;
  * @since       v1.0.0
  **/
 
-abstract class IngpspVmPaymentPlugin extends \vmPSPlugin 
+abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
 {
 
     /**
@@ -250,7 +250,7 @@ abstract class IngpspVmPaymentPlugin extends \vmPSPlugin
         $params = $this->methodParametersFactory();
         $ginger = \GingerPayments\Payment\Ginger::createClient(
                         $params->apiKey(), 
-                        $params->ingPspProduct()
+                        $params->emsPayProduct()
         );
        
         if ($params->bundleCaCert() == true) { 

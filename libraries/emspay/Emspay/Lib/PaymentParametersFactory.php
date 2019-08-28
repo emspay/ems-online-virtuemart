@@ -1,6 +1,6 @@
 <?php
 
-namespace Ingpsp\Lib;
+namespace Emspay\Lib;
 
 /**
  * PaymentParameters Factory
@@ -13,7 +13,7 @@ class PaymentParametersFactory {
      * resolve payment method params
      * 
      * @param string $methodName
-     * @return \Ingpsp\Lib\PaymentParameters
+     * @return \Emspay\Lib\PaymentParameters
      */
     public static function getConfig($methodName) {
         try {

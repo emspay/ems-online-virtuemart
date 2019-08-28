@@ -17,9 +17,9 @@ class EndpointResolver {
     const ENDPOINT_KASSA = 'https://api.kassacompleet.nl/{version}/';
 
     /**
-     * API endpoint ING
+     * API endpoint EMS
      */
-    const ENDPOINT_ING = 'https://api.ing-checkout.com/{version}/';
+    const ENDPOINT_EMS = 'https://api.ing-checkout.com/{version}/';
 
     /**
      * API endpoint EPAY
@@ -52,8 +52,8 @@ class EndpointResolver {
     /**
      * @return string
      */
-    public function getEndpointIng() {
-        return false !== getenv('ENDPOINT_ING') ? getenv('ENDPOINT_ING') : self::ENDPOINT_ING;
+    public function getEndpointEms() {
+        return false !== getenv('ENDPOINT_EMS') ? getenv('ENDPOINT_EMS') : self::ENDPOINT_EMS;
     }
 
     /**

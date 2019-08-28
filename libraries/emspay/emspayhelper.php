@@ -2,7 +2,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-class IngpspHelper
+class EmspayHelper
 {
     
     /**
@@ -46,7 +46,7 @@ class IngpspHelper
      */
     public static function getOrderDescription($orderId) 
     {
-        return sprintf(\JText::_("INGPSP_LIB_ORDER_DESCRIPTION"), $orderId, JFactory::getConfig()->get('sitename'));
+        return sprintf(\JText::_("EMSPAY_LIB_ORDER_DESCRIPTION"), $orderId, JFactory::getConfig()->get('sitename'));
     }
     
      /**

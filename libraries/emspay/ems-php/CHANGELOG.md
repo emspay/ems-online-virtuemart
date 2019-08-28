@@ -1,4 +1,4 @@
-# Changelog ing-php
+# Changelog ems-php
 
 ** 1.4.0 **
 
@@ -14,7 +14,7 @@
 
 * Added Payconiq Payment Method
 
-* Updated License content to reflect ING Bank N.V
+* Updated License content to reflect EMS
 
 
 ** 1.3.1 **
@@ -79,7 +79,7 @@
 
 * Added Order lines implementation & unit tests
 
-* Added Klarna to ING API PHP library
+* Added Klarna to EMS API PHP library
 
 * Fixed issue with null values in PUT request method
 
@@ -92,6 +92,6 @@
 
 * Added webhook_url to order creation
 
-* Updated ing-php library to latest ginger-php release
+* Updated ems-php library to latest ginger-php release
 
 * Updated README file & .gitignore
