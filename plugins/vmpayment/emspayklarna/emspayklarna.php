@@ -507,7 +507,7 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
 
         $ginger = \GingerPayments\Payment\Ginger::createClient(
                         $params->getKlarnaApiKey(),
-            $params->ingPspProduct()
+            $params->emsPayProduct()
         );
 
         if ($params->bundleCaCert() == true) {
