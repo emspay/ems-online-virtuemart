@@ -26,12 +26,12 @@ defined('_JEXEC') or die();
 	<span class="vmpayment_banktransfer_end_message" id="vmpayment_banktransfer_end_message">
         <?php 
             echo $viewData["description"].'<br/>'.
-            vmText::_('INGPSP_LIB_ORDER_IS_COMPLETE').'<br/>'.
-            vmText::_('PLG_VMPAYMENT_INGPSPBANKTRANSFER_BANK_NOTICE').'<br/>'. 
-            sprintf(vmText::_('INGPSP_LIB_PLEASE_TRANSFER_MONEY', $viewData['total_to_pay'])).'<br/>'.
-            vmText::_('PLG_VMPAYMENT_INGPSPBANKTRANSFER_PAYMENT_REFERENCE')." ".$viewData['reference'].'<br/>'.
-            vmText::_('PLG_VMPAYMENT_INGPSPBANKTRANSFER_BANK_INFORMATION'). '<br/><br/>'.
-            "<p>". JText::_('INGPSP_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
+            vmText::_('EMSPAY_LIB_ORDER_IS_COMPLETE').'<br/>'.
+            vmText::_('PLG_VMPAYMENT_EMSPAYBANKTRANSFER_BANK_NOTICE').'<br/>'.
+            sprintf(vmText::_('EMSPAY_LIB_PLEASE_TRANSFER_MONEY', $viewData['total_to_pay'])).'<br/>'.
+            vmText::_('PLG_VMPAYMENT_EMSPAYBANKTRANSFER_PAYMENT_REFERENCE')." ".$viewData['reference'].'<br/>'.
+            vmText::_('PLG_VMPAYMENT_EMSPAYBANKTRANSFER_BANK_INFORMATION'). '<br/><br/>'.
+            "<p>". JText::_('EMSPAY_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
         ?>
 	</span>
 </div>

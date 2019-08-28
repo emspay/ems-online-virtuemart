@@ -2,7 +2,7 @@
 
 defined('_JEXEC') or die('Restricted access');
 
-use Ingpsp\Lib\IngpspVmPaymentPlugin;
+use Emspay\Lib\EmspayVmPaymentPlugin;
 
 /**
  *   ╲          ╱
@@ -28,11 +28,11 @@ if (!class_exists('vmPSPlugin')) {
     require(VMPATH_PLUGINLIBS . DS . 'vmpsplugin.php');
 }
 
-JLoader::registerNamespace('Ingpsp', JPATH_LIBRARIES . '/ingpsp');
-JImport('ingpsp.ing-php.vendor.autoload');
-JImport('ingpsp.ingpsphelper');
+JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
+JImport('emspay.ems-php.vendor.autoload');
+JImport('emspay.emspayhelper');
 
-class plgVmPaymentIngpspbanktransfer extends IngpspVmPaymentPlugin
+class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
 {
 
     /**
@@ -80,15 +80,15 @@ class plgVmPaymentIngpspbanktransfer extends IngpspVmPaymentPlugin
             }
         }
 
-        $totalInCents = IngpspHelper::getAmountInCents($totalInPaymentCurrency['value']);
+        $totalInCents = EmspayHelper::getAmountInCents($totalInPaymentCurrency['value']);
         $orderId = $order['details']['BT']->virtuemart_order_id;
-        $description = IngpspHelper::getOrderDescription($orderId);
-        $customer = \Ingpsp\Lib\CommonCustomerFactory::create(
+        $description = EmspayHelper::getOrderDescription($orderId);
+        $customer = \Emspay\Lib\CommonCustomerFactory::create(
                         $order['details']['BT'],
-                        \IngpspHelper::getLocale(),
+                        \EmspayHelper::getLocale(),
                         \JFactory::getApplication()->input->server->get('REMOTE_ADDR')
         );
-        $plugin = ['plugin' => IngpspHelper::getPluginVersion($this->_name)];
+        $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
         
         $paymentMethodDetails = [
@@ -112,17 +112,17 @@ class plgVmPaymentIngpspbanktransfer extends IngpspVmPaymentPlugin
                     $webhook                    // WebHook URL
             );
         } catch (\Exception $exception) {
-            $html = "<p>" . JText::_("INGPSP_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$exception->getMessage()."</p>";
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$exception->getMessage()."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
         if ($response->status()->isError()) {
-            $html = "<p>" . JText::_("INGPSP_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response->transactions()->current()->reason()->toString()."</p>";
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response->transactions()->current()->reason()->toString()."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
         if (!$response->getId()) {
-            $html = "<p>" . JText::_("INGPSP_LIB_ERROR_TRANSACTION") . "</p><p>Error: Response did not include id!</p>";
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: Response did not include id!</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
@@ -147,14 +147,14 @@ class plgVmPaymentIngpspbanktransfer extends IngpspVmPaymentPlugin
             $html = $this->renderByLayout('post_payment', array(
                         'total_to_pay' => $totalInPaymentCurrency['display'],
                         'reference' => $this->getGingerPaymentReference($response->toArray()),
-                        'description' => "<p>" . IngpspHelper::getOrderDescription($virtuemart_order_id) . "</p>"
+                        'description' => "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>"
             ));
             $this->emptyCart(null, $virtuemart_order_id);
             vRequest::setVar('html', $html);
             return true;
         }
-        $html = "<p>" . IngpspHelper::getOrderDescription($virtuemart_order_id) . "</p>".
-                "<p>" . JText::_("INGPSP_LIB_ERROR_STATUS") . "</p>";
+        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>".
+                "<p>" . JText::_("EMSPAY_LIB_ERROR_STATUS") . "</p>";
         $this->processFalseOrderStatusResponse($html);
     }
 
