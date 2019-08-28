@@ -20,11 +20,6 @@
         <fields name="params">
             <fieldset name="emspaybanktransfer">
                 <field type="text" name="EMSPAY_API_KEY" value="{$EMSPAY_API_KEY}" default="" label="EMSPAY_API_KEY_TITLE" description="EMSPAY_API_KEY_EXPLAIN" />
-                <field name="EMSPAY_LIB_PRODUCT" type="radio" default="" label="EMSPAY_LIB_PRODUCT_TITLE" description="EMSPAY_LIB_PRODUCT_EXPLAIN">
-                    <option value="kassacompleet">EMSPAY_LIB_PRODUCT_KC</option>
-                    <option value="emscheckout">EMSPAY_LIB_PRODUCT_EMS_CHECKOUT</option>
-                    <option value="epay">EMSPAY_LIB_PRODUCT_EMS_EPAY</option>
-                </field>
                 <field name="EMSPAY_LIB_BUNDLE_CA_CERT" type="radio" default="1" label="EMSPAY_LIB_BUNDLE_CA_CERT_TITLE" description="EMSPAY_LIB_BUNDLE_CA_CERT_EXPLAIN">
                     <option value="0">EMSPAY_LIB_NO</option>
                     <option value="1">EMSPAY_LIB_YES</option>

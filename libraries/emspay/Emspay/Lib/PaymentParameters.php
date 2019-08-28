@@ -13,7 +13,6 @@ class PaymentParameters
     public static $mapping = [
         'EMSPAY_API_KEY' => 'apiKey',
         'EMSPAY_LIB_BUNDLE_CA_CERT' => 'bundleCaCert',
-        'EMSPAY_LIB_PRODUCT' => 'emsPayProduct',
         'EMSPAY_ALLOW_NOTIFICATIONS_FROM_X' => 'allowNotification',
         'EMSPAY_STATUS_NEW' => 'statusNew',
         'EMSPAY_STATUS_PENDING' => 'statusPending',

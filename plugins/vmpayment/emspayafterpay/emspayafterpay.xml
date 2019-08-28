@@ -22,11 +22,6 @@
                 <field type="text" name="EMSPAY_API_KEY" value="{$EMSPAY_API_KEY}" default="" label="EMSPAY_API_KEY_TITLE" description="EMSPAY_API_KEY_EXPLAIN" />
                 <field type="text" name="EMSPAY_AFTERPAY_TEST_APIKEY" value="{$EMSPAY_AFTERPAY_TEST_APIKEY}" default="" label="EMSPAY_AFTERPAY_TEST_APIKEY_TITLE" description="EMSPAY_AFTERPAY_TEST_APIKEY_EXPLAIN" />
                 <field name="EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES" type="text" value="{$EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES}" default="" label="EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES_TITLE" description="EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES_EXPLAIN" />
-                <field name="EMSPAY_LIB_PRODUCT" type="radio" default="" label="EMSPAY_LIB_PRODUCT_TITLE" description="EMSPAY_LIB_PRODUCT_EXPLAIN">
-                    <option value="kassacompleet">EMSPAY_LIB_PRODUCT_KC</option>
-                    <option value="ingcheckout">EMSPAY_LIB_PRODUCT_EMS_CHECKOUT</option>
-                    <option value="epay">EMSPAY_LIB_PRODUCT_EMS_EPAY</option>
-                </field>
                 <field name="EMSPAY_LIB_BUNDLE_CA_CERT" type="radio" default="1" label="EMSPAY_LIB_BUNDLE_CA_CERT_TITLE" description="EMSPAY_LIB_BUNDLE_CA_CERT_EXPLAIN">
                     <option value="0">EMSPAY_LIB_NO</option>
                     <option value="1">EMSPAY_LIB_YES</option>
