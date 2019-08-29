@@ -30,7 +30,6 @@ class PaymentParameters
     ];
     private $apiKey;
     private $bundleCaCert;
-    private $emsPayProduct;
     private $allowNotification;
     private $statusNew;
     private $statusPending;
@@ -54,11 +53,6 @@ class PaymentParameters
     public function bundleCaCert() 
     {
         return boolval($this->bundleCaCert);
-    }
-
-    public function emsPayProduct()
-    {
-        return $this->emsPayProduct;
     }
 
     public function allowNotification() 

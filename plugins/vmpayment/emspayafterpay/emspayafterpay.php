@@ -586,8 +586,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
         $params = $this->methodParametersFactory();
         
         $ginger = \GingerPayments\Payment\Ginger::createClient(
-            $params->getAfterpayApiKey(),
-            $params->emsPayProduct()
+            $params->getAfterpayApiKey()
         );
 
         if ($params->bundleCaCert() == true) {

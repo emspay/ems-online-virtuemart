@@ -13,24 +13,8 @@ class EndpointResolverTest extends \PHPUnit_Framework_TestCase
         $resolver = new EndpointResolver();
         
         $this->assertEquals(
-            $resolver->getEndpointGinger(),
-            EndpointResolver::ENDPOINT_GINGER
-        );
-        
-        $this->assertEquals(
             $resolver->getEndpointEms(),
             EndpointResolver::ENDPOINT_EMS
         );
-        
-        $this->assertEquals(
-            $resolver->getEndpointKassa(),
-            EndpointResolver::ENDPOINT_KASSA
-        );
-        
-        $this->assertEquals(
-            $resolver->getEndpointEpay(),
-            EndpointResolver::ENDPOINT_EPAY
-        );
     }
-    
 }

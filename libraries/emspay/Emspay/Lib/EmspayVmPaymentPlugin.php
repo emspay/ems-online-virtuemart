@@ -249,8 +249,7 @@ abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
     {
         $params = $this->methodParametersFactory();
         $ginger = \GingerPayments\Payment\Ginger::createClient(
-                        $params->apiKey(), 
-                        $params->emsPayProduct()
+                        $params->apiKey()
         );
        
         if ($params->bundleCaCert() == true) { 
