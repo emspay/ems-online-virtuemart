@@ -111,6 +111,7 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
                     $plugin,                    // Extra Information
                     $webhook                    // WebHook URL
             );
+
         } catch (\Exception $exception) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$exception->getMessage()."</p>";
             $this->processFalseOrderStatusResponse($html);
@@ -147,7 +148,12 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
             $html = $this->renderByLayout('post_payment', array(
                         'total_to_pay' => $totalInPaymentCurrency['display'],
                         'reference' => $this->getGingerPaymentReference($response->toArray()),
-                        'description' => "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>"
+                        'description' => "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>",
+	                    'bank_information' => "IBAN: ".$this->getGingerPaymentIban($response->toArray()).
+	                                          "<br/>BIC: ".$this->getGingerPaymentBic($response->toArray()).
+	                                          "<br/>Account holder: ".$this->getGingerPaymentHolderName($response->toArray()).
+	                                          "<br/>City: ".$this->getGingerPaymentHolderCity($response->toArray()).
+	                                          "<br/>Country: ".$this->getGingerPaymentHolderCountry($response->toArray())
             ));
             $this->emptyCart(null, $virtuemart_order_id);
             vRequest::setVar('html', $html);
@@ -157,6 +163,31 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
                 "<p>" . JText::_("EMSPAY_LIB_ERROR_STATUS") . "</p>";
         $this->processFalseOrderStatusResponse($html);
     }
+
+	protected function getGingerPaymentIban(array $gingerOrder)
+	{
+		return $gingerOrder['transactions'][0]['payment_method_details']['creditor_iban'];
+	}
+
+	protected function getGingerPaymentBic(array $gingerOrder)
+	{
+		return $gingerOrder['transactions'][0]['payment_method_details']['creditor_bic'];
+	}
+
+	protected function getGingerPaymentHolderName(array $gingerOrder)
+	{
+		return $gingerOrder['transactions'][0]['payment_method_details']['creditor_account_holder_name'];
+	}
+
+	protected function getGingerPaymentHolderCity(array $gingerOrder)
+	{
+		return $gingerOrder['transactions'][0]['payment_method_details']['creditor_account_holder_city'];
+	}
+
+	protected function getGingerPaymentHolderCountry(array $gingerOrder)
+	{
+		return $gingerOrder['transactions'][0]['payment_method_details']['creditor_account_holder_country'];
+	}
 
     protected function getGingerPaymentReference(array $gingerOrder)
     {
