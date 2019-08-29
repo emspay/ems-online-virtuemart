@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension type="package" version="2.5.0" method="upgrade">
+    <name>EMS Online - Virtuemart Package</name>
+    <description>EMS Online Virtuemart Package containing all available payment methods</description>
+    <packagename>emspay</packagename>
+    <author>Ginger Payments</author>
+    <packager>Ginger Payments</packager>
+    <creationDate>November 2017</creationDate>
+    <copyright>Copyright 2018 - Ginger Payments B.V.</copyright>
+    <license>The MIT License (MIT)</license>
+    <authorEmail>plugins@gingerpayments.com</authorEmail>
+    <authorUrl>https://www.gingerpayments.com</authorUrl>
+    <version>1.1.0</version>
+    <files folder="extensions">
+        <file id="emspay" type="library">emspay.zip</file>
+        <file id="emspayafterpay" type="plugin" group="vmpayment">emspayafterpay.zip</file>
+        <file id="emspaybancontact" type="plugin" group="vmpayment">emspaybancontact.zip</file>
+        <file id="emspaybanktransfer" type="plugin" group="vmpayment">emspaybanktransfer.zip</file>
+        <file id="emspaycashondelivery" type="plugin" group="vmpayment">emspaycashondelivery.zip</file>
+        <file id="emspaycreditcard" type="plugin" group="vmpayment">emspaycreditcard.zip</file>
+        <file id="emspayhomepay" type="plugin" group="vmpayment">emspayhomepay.zip</file>
+        <file id="emspayideal" type="plugin" group="vmpayment">emspayideal.zip</file>
+        <file id="emspayklarna" type="plugin" group="vmpayment">emspayklarna.zip</file>
+        <file id="emspaypaypal" type="plugin" group="vmpayment">emspaypaypal.zip</file>
+        <file id="emspaysofort" type="plugin" group="vmpayment">emspaysofort.zip</file>
+        <file id="emspaypayconiq" type="plugin" group="vmpayment">emspaypayconiq.zip</file>
+    </files>
+</extension>
