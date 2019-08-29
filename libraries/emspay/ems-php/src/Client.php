@@ -60,60 +60,6 @@ final class Client
     }
 
     /**
-     * Get allowed payment methods.
-     *
-     * @return array
-     */
-    public function getAllowedProducts()
-    {
-        try {
-            return $this->processProducts(
-                $this->httpClient->get('merchants/self/projects/self/')->json()
-            );
-        } catch (RequestException $exception) {
-            return [];
-        }
-    }
-
-    /**
-     * Process the API response with allowed payment methods.
-     *
-     * @param array $details
-     * @return array
-     */
-    private function processProducts($details)
-    {
-        $result = array();
-
-        if (!array_key_exists('permissions', $details)) {
-            return $result;
-        }
-
-        $products_to_check = array(
-            'ideal' => 'ideal',
-            'bank-transfer' => 'banktransfer',
-            'bancontact' => 'bancontact',
-            'credit-card' => 'creditcard',
-            'paypal' => 'paypal',
-            'klarna' => 'klarna',
-            'sofort' => 'sofort',
-            'payconiq' => 'payconiq',
-            'afterpay' => 'afterpay'
-        );
-
-        foreach ($products_to_check as $permission_id => $id) {
-            if (array_key_exists('/payment-methods/'.$permission_id.'/', $details['permissions']) &&
-                array_key_exists('POST', $details['permissions']['/payment-methods/'.$permission_id.'/']) &&
-                $details['permissions']['/payment-methods/'.$permission_id.'/']['POST']
-            ) {
-                $result[] = $id;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
      * Check if account is in test mode.
      *
      * @return bool
