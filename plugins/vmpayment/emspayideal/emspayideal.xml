@@ -12,6 +12,8 @@
     <files>
         <filename plugin="emspayideal">emspayideal.php</filename>
         <folder>language</folder>
+        <folder>emspayideal</folder>
+        <folder>assets</folder>
     </files>
     <media folder="media" destination="../images/virtuemart/payment">
 	<filename>emspayideal.png</filename>

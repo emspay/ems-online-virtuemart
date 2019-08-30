@@ -12,6 +12,7 @@
     <files>
         <filename plugin="emspaybanktransfer">emspaybanktransfer.php</filename>
         <folder>language</folder>
+        <folder>emspaybanktransfer</folder>
     </files>
     <media folder="media" destination="../images/virtuemart/payment">
 	<filename>emspaybanktransfer.png</filename>
