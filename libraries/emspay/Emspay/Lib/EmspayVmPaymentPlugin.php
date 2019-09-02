@@ -354,6 +354,14 @@ abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
     
     public function plgVmOnCheckAutomaticSelectedPayment (\VirtueMartCart $cart, array $cart_prices = array(), &$paymentCounter) 
     {
-        return $this->onCheckAutomaticSelected ($cart, $cart_prices, $paymentCounter);
+    	// Following the example of authorizenet
+    	// plugins\vmpayment\authorizenet\authorizenet.php
+        $return = $this->onCheckAutomaticSelected ($cart, $cart_prices, $paymentCounter);
+
+	    if (isset($return)) {
+		    return 0;
+	    } else {
+		    return NULL;
+	    }
     }
 }
