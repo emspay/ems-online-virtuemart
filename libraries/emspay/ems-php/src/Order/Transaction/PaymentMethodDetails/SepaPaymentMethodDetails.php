@@ -103,6 +103,7 @@ final class SepaPaymentMethodDetails implements PaymentMethodDetails
             'consumer_country' => ($this->consumerCountry() !== null) ? $this->consumerCountry()->toString() : null,
             'creditor_iban' => ($this->consumerIban() !== null) ? $this->consumerIban()->toString() : null,
             'creditor_bic' => ($this->consumerBic() !== null) ? $this->consumerBic()->toString() : null,
+            'reference' => ($this->reference() !== null) ? $this->reference()->toString() : null,
             'creditor_account_holder_name' => ($this->creditorHolderName() !== null) ? $this->creditorHolderName()->toString() : null,
             'creditor_account_holder_city' => ($this->creditorHolderCity() !== null) ? $this->creditorHolderCity()->toString() : null,
             'creditor_account_holder_country' => ($this->creditorHolderCountry() !== null) ? $this->creditorHolderCountry()->toString() : null
