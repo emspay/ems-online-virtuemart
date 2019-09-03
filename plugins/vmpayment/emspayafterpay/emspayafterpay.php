@@ -164,7 +164,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
                 . JText::_('PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_SELECT_GENDER_FEMALE') . '</option>';
         $html .= "</select><br/>";
         $html .= JText::_('PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_ENTER_DOB') . '<br>';
-        $html .= '<input type="text" name="dob" value="' . JFactory::getSession()->get('emspayafterpay_dob', null, 'vm') . '"/>';
+        $html .= '<input type="text" name="emspayafterpay_dob" value="' . JFactory::getSession()->get('emspayafterpay_dob', null, 'vm') . '"/>';
         $html .= '<i>('.JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_DATE_FORMAT").')</i></br>';
         $html .= '<input type="checkbox" name="terms_and_confditions" '.(JFactory::getSession()->get('emspayafterpay_terms_and_confditions', null, 'vm')  == 'on' ?   'checked="checked"' : null).' />';
         $html .= '<a href="'.$this->gettermsAndConditionsUrlByCountry($country).'" target="blank">'.JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_TERMS_AND_CONDITIONS").'</a>';
@@ -244,7 +244,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
             return false;
         }
         JFactory::getSession()->set('emspayafterpay_gender', vRequest::getVar('gender'), 'vm');
-        JFactory::getSession()->set('emspayafterpay_dob', vRequest::getVar('dob'), 'vm');
+        JFactory::getSession()->set('emspayafterpay_dob', vRequest::getVar('emspayafterpay_dob'), 'vm');
         JFactory::getSession()->set('emspayafterpay_terms_and_confditions', vRequest::getVar('terms_and_confditions'), 'vm');
 
         return true;
