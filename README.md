@@ -2,9 +2,7 @@
 
 ## About
 
-By integrating your webshop with EMS Online you can accept payments from your customers in an easy and trusted manner with all relevant payment methods supported. 
-
-The following payment methods are supported, depending on which ING PSP product you implement: iDEAL, Bancontact, Visa, mastercard, Afterpay, Payconiq, PayPal, SOFORT, Klarna and Bank transfers.
+By integrating your webshop with EMS Online you can accept payments from your customers in an easy and trusted manner with all relevant payment methods supported.
 
 ## Version number
 Version v1.0.0
