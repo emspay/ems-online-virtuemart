@@ -103,6 +103,46 @@ final class Client
     }
 
     /**
+     * Create a new Apple Pay order.
+     *
+     * @param $amount
+     * @param $currency
+     * @param null $description
+     * @param null $merchantOrderId
+     * @param null $returnUrl
+     * @param null $expirationPeriod
+     * @param null $customer
+     * @param null $extra
+     * @param null $webhookUrl
+     * @return Order
+     */
+    public function createApplePayOrder(
+        $amount,
+        $currency,
+        $description = null,
+        $merchantOrderId = null,
+        $returnUrl = null,
+        $expirationPeriod = null,
+        $customer = null,
+        $extra = null,
+        $webhookUrl = null
+    ) {
+            return $this->postOrder(
+                Order::createWithApplePay(
+                    $amount,
+                    $currency,
+                    $description,
+                    $merchantOrderId,
+                    $returnUrl,
+                    $expirationPeriod,
+                    $customer,
+                    $extra,
+                    $webhookUrl
+                )
+            );
+    }
+
+    /**
      * Create a new SEPA order.
      *
      * @param integer $amount Amount in cents.
