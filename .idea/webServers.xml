@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d8d5eaa0-4f6a-4f63-87c0-c632a639f3f5" name="111" url="http://ftp.gingerpluginsnl.hosting-cluster.nl">
+        <fileTransfer host="ftp.gingerpluginsnl.hosting-cluster.nl" port="21" rootFolder="/subsites/virtuemart.interndev.gingerplugins.nl">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -13,13 +13,13 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/emspay/ems-php"
+            "url": "https://github.com/ingpsp/ing-php"
         }
     ],
     "require": {
         "php": ">=5.4.0",
         "guzzlehttp/guzzle": "~5.2",
-        "beberlei/assert": "~2.3",
+        "beberlei/assert": "3.2.6",
         "mathiasverraes/classfunctions": "~1.1",
         "ronanguilloux/isocodes": "~1.1",
         "ramsey/uuid": "~3.6",
