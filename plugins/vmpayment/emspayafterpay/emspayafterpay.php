@@ -115,7 +115,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
      */
     protected function addressIsAllowed()
     {
-        return (bool) in_array($_SERVER['REMOTE_ADDR'], $this->methodParametersFactory()->afterpayAllowedIpAddresses());
+        return (bool) in_array(filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP), $this->methodParametersFactory()->afterpayAllowedIpAddresses());
     }
     
     /**
@@ -330,7 +330,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
         $customer = \Emspay\Lib\CommonCustomerFactory::create(
                         $order['details']['BT'],
                         \EmspayHelper::getLocale(),
-                        \JFactory::getApplication()->input->server->get('REMOTE_ADDR'),
+                        filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP),
                         \JFactory::getSession()->get('emspayafterpay_gender', null, 'vm'),
                         $this->convertDateToAcceptedFormat(\JFactory::getSession()->get('emspayafterpay_dob', null, 'vm'))
         );

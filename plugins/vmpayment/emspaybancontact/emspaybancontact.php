@@ -85,7 +85,7 @@ class plgVmPaymentEmspaybancontact extends EmspayVmPaymentPlugin
         $customer = \Emspay\Lib\CommonCustomerFactory::create(
                         $order['details']['BT'],
                         \EmspayHelper::getLocale(),
-                        \JFactory::getApplication()->input->server->get('REMOTE_ADDR')
+                        filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP)
         );
         $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
