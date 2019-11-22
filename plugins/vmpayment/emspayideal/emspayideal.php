@@ -194,12 +194,10 @@ class plgVmPaymentEmspayideal extends EmspayVmPaymentPlugin
         $orderId = $order['details']['BT']->virtuemart_order_id;
         $description = EmspayHelper::getOrderDescription($orderId);
         $returnUrl = EmspayHelper::getReturnUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
-        $ip_addr = filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP) ?
-        \JFactory::getApplication()->input->server->get('REMOTE_ADDR') : null;
         $customer = \Emspay\Lib\CommonCustomerFactory::create(
             $order['details']['BT'],
             \EmspayHelper::getLocale(),
-            $ip_addr
+            filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP)
         );
         $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));

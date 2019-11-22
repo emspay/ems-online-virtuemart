@@ -257,7 +257,7 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
         $customer = \Emspay\Lib\CommonCustomerFactory::create(
                         $order['details']['BT'],
                         \EmspayHelper::getLocale(),
-                        \JFactory::getApplication()->input->server->get('REMOTE_ADDR'),
+                        filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP),
                         \JFactory::getSession()->get('emspayklarna_gender', null, 'vm'),
                         $this->convertDateToKlarnaFormat(\JFactory::getSession()->get('emspayklarna_dob', null, 'vm'))
         );
