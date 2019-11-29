@@ -524,7 +524,7 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
      * @return mixed Null for methods that aren't active, text (HTML) otherwise
      * @author Valerie Isaksen
      */
-    protected function plgVmOnShowOrderFEPayment($virtuemart_order_id, $virtuemart_paymentmethod_id, &$payment_name)
+    public function plgVmOnShowOrderFEPayment($virtuemart_order_id, $virtuemart_paymentmethod_id, &$payment_name)
     {
         $this->onShowOrderFE($virtuemart_order_id, $virtuemart_paymentmethod_id, $payment_name);
         return true;
