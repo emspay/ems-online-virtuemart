@@ -1,6 +1,6 @@
 <?php
 
-namespace GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\SofortPaymentMethodDetails;
+namespace GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\KlarnaPayNowPaymentMethodDetails;
 
 use Assert\Assertion as Guard;
 use GingerPayments\Payment\Common\StringBasedValueObject;
@@ -14,7 +14,7 @@ final class TransactionId
      */
     private function __construct($value)
     {
-        Guard::notBlank($value, 'SOFORT transaction ID cannot be blank');
+        Guard::notBlank($value, 'Klarna Pay Now transaction ID cannot be blank');
 
         $this->value = $value;
     }

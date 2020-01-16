@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" version="3.0" method="upgrade" group="vmpayment">
-    <name>EMS Online - Sofort</name>
+    <name>EMS Online - Klarna Pay Now</name>
     <creationDate>11/01/2017</creationDate>
     <version>1.1.0</version>
     <author>Ginger Payments</author>
@@ -10,14 +10,14 @@
     <license>The MIT License (MIT)</license>
     <description>PLG_VMPAYMENT_EMSPAYPAYPAL_DESCRIPTION</description>
     <files>
-        <filename plugin="emspaysofort">emspaysofort.php</filename>
+        <filename plugin="emspayklarnapaynow">emspayklarnapaynow.php</filename>
     </files>
     <media folder="media" destination="../images/virtuemart/payment">
-	<filename>emspaysofort.png</filename>
+	<filename>emspayklarnapaynow.png</filename>
     </media>
     <vmconfig>
         <fields name="params">
-            <fieldset name="emspaysofort">
+            <fieldset name="emspayklarnapaynow">
                 <field type="text" name="EMSPAY_API_KEY" value="{$EMSPAY_API_KEY}" default="" label="EMSPAY_API_KEY_TITLE" description="EMSPAY_API_KEY_EXPLAIN" />
                 <field name="EMSPAY_LIB_BUNDLE_CA_CERT" type="radio" default="1" label="EMSPAY_LIB_BUNDLE_CA_CERT_TITLE" description="EMSPAY_LIB_BUNDLE_CA_CERT_EXPLAIN">
                     <option value="0">EMSPAY_LIB_NO</option>

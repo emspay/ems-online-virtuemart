@@ -200,7 +200,7 @@ final class Client
      *
      * @return Order The newly created order.
      */
-    public function createSofortOrder(
+    public function createKlarnaPayNowOrder(
         $amount,
         $currency,
         array $paymentMethodDetails = [],
@@ -213,7 +213,7 @@ final class Client
         $webhookUrl = null
     ) {
         return $this->postOrder(
-            Order::createWithSofort(
+            Order::createWithKlarnaPayNow(
                 $amount,
                 $currency,
                 $paymentMethodDetails,

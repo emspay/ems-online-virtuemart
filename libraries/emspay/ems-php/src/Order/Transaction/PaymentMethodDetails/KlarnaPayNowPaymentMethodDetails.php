@@ -6,9 +6,9 @@ use GingerPayments\Payment\Iban;
 use GingerPayments\Payment\SwiftBic;
 use GingerPayments\Payment\Order\Transaction\PaymentMethodDetails;
 use GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\ConsumerName;
-use GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\SofortPaymentMethodDetails\TransactionId;
+use GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\KlarnaPayNowPaymentMethodDetails\TransactionId;
 
-final class SofortPaymentMethodDetails implements PaymentMethodDetails
+final class KlarnaPayNowPaymentMethodDetails implements PaymentMethodDetails
 {
     /**
      * @var TransactionId|null
@@ -32,7 +32,7 @@ final class SofortPaymentMethodDetails implements PaymentMethodDetails
 
     /**
      * @param array $details
-     * @return SofortPaymentMethodDetails
+     * @return KlarnaPayNowPaymentMethodDetails
      */
     public static function fromArray(array $details)
     {

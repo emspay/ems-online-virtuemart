@@ -20,8 +20,8 @@ final class PaymentMethodDetailsFactory
             return SepaPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
-        if ($paymentMethod->isSofort()) {
-            return SofortPaymentMethodDetails::fromArray($paymentMethodDetails);
+        if ($paymentMethod->isKlarnaPayNow()) {
+            return KlarnaPayNowPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
         if ($paymentMethod->isBancontact()) {

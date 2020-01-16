@@ -55,7 +55,7 @@ final class PaymentMethodDetailsFactoryTest extends \PHPUnit_Framework_TestCase
     public function itShouldCreateASofortPaymentMethodDetails()
     {
         $this->assertInstanceOf(
-            'GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\SofortPaymentMethodDetails',
+            'GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\KlarnaPayNowPaymentMethodDetails',
             PaymentMethodDetailsFactory::createFromArray(
                 PaymentMethod::fromString(PaymentMethod::SOFORT),
                 []

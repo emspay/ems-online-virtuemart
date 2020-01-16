@@ -32,7 +32,7 @@ JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
 JImport('emspay.ems-php.vendor.autoload');
 JImport('emspay.emspayhelper');
 
-class plgVmPaymentEmspaysofort extends EmspayVmPaymentPlugin
+class plgVmPaymentEmspayKlarnaPayNow extends EmspayVmPaymentPlugin
 {
     /**
      * Constructor
