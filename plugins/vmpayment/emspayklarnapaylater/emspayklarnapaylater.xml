@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" version="3.0" method="upgrade" group="vmpayment">
-    <name>EMS Online - Klarna</name>
+    <name>EMS Online - Klarna Pay Later</name>
     <creationDate>11/01/2017</creationDate>
     <version>1.1.0</version>
     <author>Ginger Payments</author>
@@ -8,17 +8,17 @@
     <authorUrl>https://www.gingerpayments.com</authorUrl>
     <copyright>Copyright 2018 - Ginger Payments B.V.</copyright>
     <license>The MIT License (MIT)</license>
-    <description>PLG_VMPAYMENT_EMSPAYKLARNA_DESCRIPTION</description>
+    <description>PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_DESCRIPTION</description>
     <files>
-        <filename plugin="emspayklarna">emspayklarna.php</filename>
+        <filename plugin="emspayklarnapaylater">emspayklarnapaylater.php</filename>
         <folder>language</folder>
     </files>
     <media folder="media" destination="../images/virtuemart/payment">
-	<filename>emspayklarna.png</filename>
+	<filename>emspayklarnapaylater.png</filename>
     </media>
     <vmconfig>
         <fields name="params">
-            <fieldset name="emspayklarna">
+            <fieldset name="emspayklarnapaylater">
                 <field type="text" name="EMSPAY_API_KEY" value="{$EMSPAY_API_KEY}" default="" label="EMSPAY_API_KEY_TITLE" description="EMSPAY_API_KEY_EXPLAIN" />
                 <field type="text" name="EMSPAY_TEST_API_KEY" value="{$EMSPAY_TEST_API_KEY}" default="" label="EMSPAY_TEST_API_KEY_TITLE" description="EMSPAY_TEST_API_KEY_EXPLAIN" />
                 <field name="EMSPAY_ALLOWED_IP_ADDRESSES" type="text" value="{$EMSPAY_ALLOWED_IP_ADDRESSES}" default="" label="EMSPAY_ALLOWED_IP_ADDRESSES_TITLE" description="EMSPAY_ALLOWED_IP_ADDRESSES_EXPLAIN" />

@@ -4,7 +4,7 @@ namespace GingerPayments\Payment\Order\Transaction\PaymentMethodDetails;
 
 use GingerPayments\Payment\Order\Transaction\PaymentMethodDetails;
 
-final class KlarnaPaymentMethodDetails implements PaymentMethodDetails
+final class KlarnaPayLaterPaymentMethodDetails implements PaymentMethodDetails
 {
     /**
      * @param array $details
@@ -24,7 +24,7 @@ final class KlarnaPaymentMethodDetails implements PaymentMethodDetails
     }
 
     /**
-     * KlarnaPaymentMethodDetails constructor.
+     * KlarnaPayLaterPaymentMethodDetails constructor.
      */
     private function __construct()
     {

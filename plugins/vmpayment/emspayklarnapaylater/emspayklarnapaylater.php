@@ -32,7 +32,7 @@ JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
 JImport('emspay.ems-php.vendor.autoload');
 JImport('emspay.emspayhelper');
 
-class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
+class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
 {
 
     /**
@@ -107,18 +107,18 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
      */
     public function customInfoHTML()
     {
-        $html = JText::_('PLG_VMPAYMENT_EMSPAYKLARNA_MESSAGE_SELECT_GENDER') . ' <br/>';
+        $html = JText::_('PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_SELECT_GENDER') . ' <br/>';
         $html .= '<select name="gender" id="' . $this->name . '" class="' . $this->name . '">';
         $html .= '<option value="male" '
-                . (JFactory::getSession()->get('emspayklarna_gender') == 'male' ? " selected" : "") . '>'
-                . JText::_('PLG_VMPAYMENT_EMSPAYKLARNA_MESSAGE_SELECT_GENDER_MALE') . '</option>';
+                . (JFactory::getSession()->get('emspayklarnapaylater_gender') == 'male' ? " selected" : "") . '>'
+                . JText::_('PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_SELECT_GENDER_MALE') . '</option>';
         $html .= '<option value="female" '
-                . (JFactory::getSession()->get('emspayklarna_gender') == 'male' ? " selected" : "") . '>'
-                . JText::_('PLG_VMPAYMENT_EMSPAYKLARNA_MESSAGE_SELECT_GENDER_FEMALE') . '</option>';
+                . (JFactory::getSession()->get('emspayklarnapaylater_gender') == 'male' ? " selected" : "") . '>'
+                . JText::_('PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_SELECT_GENDER_FEMALE') . '</option>';
         $html .= "</select><br/>";
-        $html .= JText::_('PLG_VMPAYMENT_EMSPAYKLARNA_MESSAGE_ENTER_DOB') . '<br>';
-        $html .= '<input type="text" name="dob" value="' . JFactory::getSession()->get('emspayklarna_dob', null, 'vm') . '"/>';
-        $html .= '<i>('.JText::_("PLG_VMPAYMENT_EMSPAYKLARNA_MESSAGE_DATE_FORMAT").')</i>';
+        $html .= JText::_('PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_ENTER_DOB') . '<br>';
+        $html .= '<input type="text" name="dob" value="' . JFactory::getSession()->get('emspayklarnapaylater_dob', null, 'vm') . '"/>';
+        $html .= '<i>('.JText::_("PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_DATE_FORMAT").')</i>';
         
         return $html;
     }
@@ -142,10 +142,10 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
         }
         
         $app = JFactory::getApplication();
-        $dob = $app->getSession()->get('emspayklarna_dob', null, 'vm');
+        $dob = $app->getSession()->get('emspayklarnapaylater_dob', null, 'vm');
         if ($this->isValidDate($dob) === false) {
-            $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYKLARNA_MESSAGE_INVALID_DATE_ERROR"), 'error');
-            $app->getSession()->clear('emspayklarna_dob', 'vm');
+            $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_INVALID_DATE_ERROR"), 'error');
+            $app->getSession()->clear('emspayklarnapaylater_dob', 'vm');
             $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
         }
@@ -170,8 +170,8 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
         if (!($currentMethod = $this->getVmPluginMethod($cart->virtuemart_paymentmethod_id))) {
             return false;
         }
-        JFactory::getSession()->set('emspayklarna_gender', vRequest::getVar('gender'), 'vm');
-        JFactory::getSession()->set('emspayklarna_dob', vRequest::getVar('dob'), 'vm');
+        JFactory::getSession()->set('emspayklarnapaylater_gender', vRequest::getVar('gender'), 'vm');
+        JFactory::getSession()->set('emspayklarnapaylater_dob', vRequest::getVar('dob'), 'vm');
 
         return true;
     }
@@ -258,8 +258,8 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
                         $order['details']['BT'],
                         \EmspayHelper::getLocale(),
                         filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP),
-                        \JFactory::getSession()->get('emspayklarna_gender', null, 'vm'),
-                        $this->convertDateToKlarnaFormat(\JFactory::getSession()->get('emspayklarna_dob', null, 'vm'))
+                        \JFactory::getSession()->get('emspayklarnapaylater_gender', null, 'vm'),
+                        $this->convertDateToKlarnaPayLaterFormat(\JFactory::getSession()->get('emspayklarnapaylater_dob', null, 'vm'))
         );
 
         $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
@@ -267,7 +267,7 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
         $orderLines = $this->getOrderLines($cart, $currency_code_3);
 
         try {
-            $response = $this->getGingerClient()->createKlarnaOrder(
+            $response = $this->getGingerClient()->createKlarnaPayLaterOrder(
                     $totalInCents,          // Amount in cents
                     $currency_code_3,       // Currency
                     $description,           // Description
@@ -324,12 +324,12 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
     }
 
     /**
-     * Convert date to Klarna requested format
+     * Convert date to Klarna Pay Later requested format
      *
      * @param string $stringDate
      * @return string
      */
-    protected function convertDateToKlarnaFormat($stringDate)
+    protected function convertDateToKlarnaPayLaterFormat($stringDate)
     {
         if (preg_match('/^(\d{2})-(\d{2})-(\d{4})$/', $stringDate, $matches)) {
             $date =  DateTime::createFromFormat('d-m-Y', $stringDate);
@@ -405,8 +405,8 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
     protected function clearSessionData()
     {
         $session = JFactory::getSession();
-        $session->clear('emspayklarna_gender', 'vm');
-        $session->clear('emspayklarna_dob', 'vm');
+        $session->clear('emspayklarnapaylater_gender', 'vm');
+        $session->clear('emspayklarnapaylater_dob', 'vm');
     }
 
     
@@ -506,7 +506,7 @@ class plgVmPaymentEmspayklarna extends EmspayVmPaymentPlugin
         $params = $this->methodParametersFactory();
 
         $ginger = \GingerPayments\Payment\Ginger::createClient(
-                        $params->getKlarnaApiKey()
+                        $params->getKlarnaPayLaterApiKey()
         );
 
         if ($params->bundleCaCert() == true) {

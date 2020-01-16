@@ -28,8 +28,8 @@ final class PaymentMethodDetailsFactory
             return BancontactPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
-        if ($paymentMethod->isKlarna()) {
-            return KlarnaPaymentMethodDetails::fromArray($paymentMethodDetails);
+        if ($paymentMethod->isKlarnaPayLater()) {
+            return KlarnaPayLaterPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
         if ($paymentMethod->isPayPal()) {
