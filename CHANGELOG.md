@@ -9,3 +9,8 @@
 * Add Apple Pay
 * Fix in the beberlei/assert library
 * Fixed bug with field ip address
+
+** 1.0.4 **
+
+* Renamed SOFORT to Klarna Pay Now
+* Renamed Klarna to Klarna Pay Later
