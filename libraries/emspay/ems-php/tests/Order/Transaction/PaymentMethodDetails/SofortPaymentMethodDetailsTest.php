@@ -2,7 +2,7 @@
 
 namespace GingerPayments\Payment\Tests\Order\Transaction\PaymentMethodDetails;
 
-use GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\SofortPaymentMethodDetails;
+use GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\KlarnaPayNowPaymentMethodDetails;
 
 final class SofortPaymentMethodDetailsTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ final class SofortPaymentMethodDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldCreateFromAnArray()
     {
-        $paymentDetails = SofortPaymentMethodDetails::fromArray(
+        $paymentDetails = KlarnaPayNowPaymentMethodDetails::fromArray(
             [
                 'transaction_id' => 'some-unique-id-abc123',
                 'consumer_name' => 'FA de Vries',
@@ -21,7 +21,7 @@ final class SofortPaymentMethodDetailsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\SofortPaymentMethodDetails',
+            'GingerPayments\Payment\Order\Transaction\PaymentMethodDetails\KlarnaPayNowPaymentMethodDetails',
             $paymentDetails
         );
 
@@ -36,7 +36,7 @@ final class SofortPaymentMethodDetailsTest extends \PHPUnit_Framework_TestCase
      */
     public function itShouldSetMissingValuesToNull()
     {
-        $paymentDetails = SofortPaymentMethodDetails::fromArray([]);
+        $paymentDetails = KlarnaPayNowPaymentMethodDetails::fromArray([]);
 
         $this->assertNull($paymentDetails->transactionId());
         $this->assertNull($paymentDetails->consumerName());
@@ -58,7 +58,7 @@ final class SofortPaymentMethodDetailsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $array,
-            SofortPaymentMethodDetails::fromArray($array)->toArray()
+            KlarnaPayNowPaymentMethodDetails::fromArray($array)->toArray()
         );
     }
 }

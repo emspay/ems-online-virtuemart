@@ -20,16 +20,16 @@ final class PaymentMethodDetailsFactory
             return SepaPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
-        if ($paymentMethod->isSofort()) {
-            return SofortPaymentMethodDetails::fromArray($paymentMethodDetails);
+        if ($paymentMethod->isKlarnaPayNow()) {
+            return KlarnaPayNowPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
         if ($paymentMethod->isBancontact()) {
             return BancontactPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
-        if ($paymentMethod->isKlarna()) {
-            return KlarnaPaymentMethodDetails::fromArray($paymentMethodDetails);
+        if ($paymentMethod->isKlarnaPayLater()) {
+            return KlarnaPayLaterPaymentMethodDetails::fromArray($paymentMethodDetails);
         }
 
         if ($paymentMethod->isPayPal()) {

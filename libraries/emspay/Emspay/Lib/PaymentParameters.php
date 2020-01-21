@@ -156,7 +156,7 @@ class PaymentParameters
         return $this->testApiKey;
     }
 
-    public function getKlarnaApiKey() 
+    public function getKlarnaPayLaterApiKey()
     {
         if (!empty($this->testApiKey)) {
             return $this->testApiKey;
