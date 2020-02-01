@@ -186,7 +186,7 @@ final class Client
     }
 
     /**
-     * Create a new SOFORT order.
+     * Create a new KlarnaPayNow order.
      *
      * @param integer $amount Amount in cents.
      * @param string $currency A valid currency code.
