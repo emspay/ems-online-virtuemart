@@ -275,7 +275,7 @@ final class Order
     }
 
     /**
-     * Create a new Order with the SOFORT payment method.
+     * Create a new Order with the KlarnaPayNow payment method.
      *
      * @param integer $amount Amount in cents.
      * @param string $currency A valid currency code.

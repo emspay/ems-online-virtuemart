@@ -445,14 +445,14 @@ final class ClientTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function itShouldCreateASofortOrder()
+    public function itShouldCreateAKlarnaPayNowOrder()
     {
         $order = Order::create(
             1234,
             'EUR',
-            'sofort',
+            'klarna-pay-now',
             [],
-            'Sofort Transfer order description',
+            'Klarna Pay Now Transfer order description',
             'my-order-id',
             'http://www.example.com',
             'PT10M'
@@ -481,11 +481,11 @@ final class ClientTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'GingerPayments\Payment\Order',
-            $this->client->createSofortOrder(
+            $this->client->createKlarnaPayNowOrder(
                 1234,
                 'EUR',
                 [],
-                'Sofort Transfer order description',
+                'Klarna Pay Now Transfer order description',
                 'my-order-id',
                 'http://www.example.com',
                 'PT10M'

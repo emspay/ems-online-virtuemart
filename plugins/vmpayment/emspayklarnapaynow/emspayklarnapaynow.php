@@ -90,7 +90,7 @@ class plgVmPaymentEmspayKlarnaPayNow extends EmspayVmPaymentPlugin
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
         
         try {
-            $response = $this->getGingerClient()->createSofortOrder(
+            $response = $this->getGingerClient()->createKlarnaPayNowOrder(
                     $totalInCents,                  // Amount in cents
                     $currency_code_3,               // Currency
                     [],
