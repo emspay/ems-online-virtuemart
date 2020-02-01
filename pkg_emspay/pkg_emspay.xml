@@ -19,9 +19,9 @@
         <file id="emspaybanktransfer" type="plugin" group="vmpayment">emspaybanktransfer.zip</file>
         <file id="emspaycreditcard" type="plugin" group="vmpayment">emspaycreditcard.zip</file>
         <file id="emspayideal" type="plugin" group="vmpayment">emspayideal.zip</file>
-        <file id="emspayklarna" type="plugin" group="vmpayment">emspayklarna.zip</file>
+        <file id="emspayklarnapaylater" type="plugin" group="vmpayment">emspayklarnapaylater.zip</file>
         <file id="emspaypaypal" type="plugin" group="vmpayment">emspaypaypal.zip</file>
-        <file id="emspaysofort" type="plugin" group="vmpayment">emspaysofort.zip</file>
+        <file id="emspayklarnapaynow" type="plugin" group="vmpayment">emspayklarnapaynow.zip</file>
         <file id="emspaypayconiq" type="plugin" group="vmpayment">emspaypayconiq.zip</file>
     </files>
 </extension>
