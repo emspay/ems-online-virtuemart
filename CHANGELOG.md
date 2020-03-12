@@ -15,6 +15,6 @@
 * Renamed SOFORT to Klarna Pay Now
 * Renamed Klarna to Klarna Pay Later
 
-** 1.0.5 **
+** 1.0.7 **
 
 * Updated pkg_emspay directory and archive
