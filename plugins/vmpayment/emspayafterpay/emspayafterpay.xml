@@ -13,7 +13,7 @@
         <filename plugin="emspayafterpay">emspayafterpay.php</filename>
         <folder>language</folder>
     </files>
-    <media folder="media" destination="../images/virtuemart/payment">
+    <media folder="media" destination="/images/virtuemart/payment">
 	<filename>emspayafterpay.png</filename>
     </media>
     <vmconfig>

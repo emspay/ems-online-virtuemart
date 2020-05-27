@@ -29,7 +29,7 @@ if (!class_exists('vmPSPlugin')) {
 }
 
 JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
-JImport('emspay.ems-php.vendor.autoload');
+JImport('emspay.ginger-php.vendor.autoload');
 JImport('emspay.emspayhelper');
 
 class plgVmPaymentEmspaypayconiq extends EmspayVmPaymentPlugin
@@ -91,34 +91,37 @@ class plgVmPaymentEmspaypayconiq extends EmspayVmPaymentPlugin
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
 
         try {
-            $response = $this->getGingerClient()->createPayconicOrder(
-                    $totalInCents,          // Amount in cents
-                    $currency_code_3,       // Currency
-                    [],
-                    $description,           // Description
-                    $orderId,               // Merchant Order Id
-                    $returnUrl,             // Return URL
-                    null,                   // Expiration Period
-                    $customer->toArray(),   // Customer Information
-                    $plugin,                // Extra Information
-                    $webhook                // WebHook URL
-            );
+            $response = $this->getGingerClient()->createOrder([
+			'amount' => $totalInCents,                                  // Amount in cents
+			'currency' => $currency_code_3,                             // Currency
+			'transactions' => [
+				[
+					'payment_method' => 'ideal'                     // Payment method
+				]
+			],
+			'merchant_order_id' => $orderId,                            // Merchant Order Id
+			'description' => $description,                              // Description
+			'return_url' => $returnUrl,                                 // Return URL
+			'customer' => $customer->toArray(),                         // Customer Information
+			'extra' => ['plugin' => $plugin],                           // Extra information
+			'webhook_url' => $webhook,                                  // Webhook URL
+		]);
         } catch (\Exception $exception) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$exception->getMessage()."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
-        if ($response->status()->isError()) {
-            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response->transactions()->current()->reason()->toString()."</p>";
+        if ($response['status'] == 'error') {
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response['transactions'][0]['reason']."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
-        if (!$response->getId()) {
+        if (!$response['id']) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: Response did not include id!</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
-        if (!$response->firstTransactionPaymentUrl()) {
+        if (!$response['transactions'][0]['payment_url']) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: Response did not include payment url!</p>";
             $this->processFalseOrderStatusResponse($html);
         }
@@ -133,11 +136,11 @@ class plgVmPaymentEmspaypayconiq extends EmspayVmPaymentPlugin
         $dbValues['email_currency'] = $email_currency;
         $dbValues['payment_order_total'] = $totalInPaymentCurrency['value'];
         $dbValues['tax_id'] = $method->tax_id;
-        $dbValues['ginger_order_id'] = $response->id()->toString();
+        $dbValues['ginger_order_id'] = $response['id'];
 
         $this->storePSPluginInternalData($dbValues);
 
-        JFactory::getApplication()->redirect($response->firstTransactionPaymentUrl()->toString());
+        JFactory::getApplication()->redirect($response['transactions'][0]['payment_url']);
     }
 
     /**
@@ -166,13 +169,9 @@ class plgVmPaymentEmspaypayconiq extends EmspayVmPaymentPlugin
 
         $gingerOrder = $this->getGingerClient()->getOrder(vRequest::get('order_id'));
 
-        if (!$gingerOrder instanceof GingerPayments\Payment\Order) {
-            return JFactory::getApplication()->enqueueMessage("Error: Some text!", 'error');
-        }
-
         $virtuemart_order_id = $this->getOrderIdByGingerOrder(vRequest::get('order_id'));
 
-        $statusSucceeded = $this->updateOrder($gingerOrder->getStatus(), $virtuemart_order_id);
+        $statusSucceeded = $this->updateOrder($gingerOrder['status'], $virtuemart_order_id);
 
         $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>";
         if ($statusSucceeded) {
@@ -208,13 +207,9 @@ class plgVmPaymentEmspaypayconiq extends EmspayVmPaymentPlugin
 
         $gingerOrder = $this->getGingerClient()->getOrder($input['order_id']);
 
-        if (!$gingerOrder instanceof GingerPayments\Payment\Order) {
-            exit("Invalid order");
-        }
-
         $virtuemart_order_id = $this->getOrderIdByGingerOrder($input['order_id']);
 
-        $this->updateOrder($gingerOrder->getStatus(), $virtuemart_order_id);
+        $this->updateOrder($gingerOrder['status'], $virtuemart_order_id);
 
         exit();
     }

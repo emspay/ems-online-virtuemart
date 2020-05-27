@@ -29,7 +29,7 @@ if (!class_exists('vmPSPlugin')) {
 }
 
 JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
-JImport('emspay.ems-php.vendor.autoload');
+JImport('emspay.ginger-php.vendor.autoload');
 JImport('emspay.emspayhelper');
 
 class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
@@ -90,39 +90,36 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
         );
         $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
-        
-        $paymentMethodDetails = [
-            'consumer_name' => implode(" ", [$customer->getFirstname(), $customer->getLastname()]),
-            'consumer_address' => $customer->getAddress(),
-            'consumer_city' => $order['details']['BT']->city,
-            'consumer_country' => $customer->getCountry()
-        ];
-        
-        try {
-            $response = $this->getGingerClient()->createSepaOrder(
-                    $totalInCents,              // Amount in cents
-                    $currency_code_3,           // Currency
-                    $paymentMethodDetails,
-                    $description,               // Description
-                    $orderId,                   // Merchant Order Id
-                    null,                       // Return URL
-                    null,                       // Expiration Period
-                    $customer->toArray(),       // Customer Information
-                    $plugin,                    // Extra Information
-                    $webhook                    // WebHook URL
-            );
+	  $returnUrl = EmspayHelper::getReturnUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
+
+	  try {
+            $response = $this->getGingerClient()->createOrder([
+			'amount' => $totalInCents,                           // Amount in cents
+			'currency' => $currency_code_3,                      // Currency
+			'transactions' => [
+				[
+					'payment_method' => 'bank-transfer'      // Payment method
+				]
+			],
+			'merchant_order_id' => $orderId,                     // Merchant Order Id
+			'description' => $description,                       // Description
+			'return_url' => $returnUrl,                          // Return URL
+			'customer' => $customer->toArray(),                  // Customer Information
+			'extra' => ['plugin' => $plugin],                    // Extra information
+			'webhook_url' => $webhook                            // Webhook URL
+		]);
 
         } catch (\Exception $exception) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$exception->getMessage()."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
-        if ($response->status()->isError()) {
-            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response->transactions()->current()->reason()->toString()."</p>";
+        if ($response['status'] == 'error') {
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response['transactions'][0]['reason']."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
-        if (!$response->getId()) {
+        if (!$response['id']) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: Response did not include id!</p>";
             $this->processFalseOrderStatusResponse($html);
         }
@@ -137,23 +134,23 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
         $dbValues['email_currency'] = $email_currency;
         $dbValues['payment_order_total'] = $totalInPaymentCurrency['value'];
         $dbValues['tax_id'] = $method->tax_id;
-        $dbValues['ginger_order_id'] = $response->id()->toString();
+        $dbValues['ginger_order_id'] = $response['id'];
 
         $this->storePSPluginInternalData($dbValues);
 
-        $virtuemart_order_id = $this->getOrderIdByGingerOrder($response->getId());
-        $statusSucceeded = $this->updateOrder($response->getStatus(), $virtuemart_order_id);
+        $virtuemart_order_id = $this->getOrderIdByGingerOrder($response['id']);
+        $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_order_id);
 
         if ($statusSucceeded) {
             $html = $this->renderByLayout('post_payment', array(
                         'total_to_pay' => $totalInPaymentCurrency['display'],
-                        'reference' => $this->getGingerPaymentReference($response->toArray()),
+                        'reference' => $this->getGingerPaymentReference($response),
                         'description' => "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>",
-	                    'bank_information' => "IBAN: ".$this->getGingerPaymentIban($response->toArray()).
-	                                          "<br/>BIC: ".$this->getGingerPaymentBic($response->toArray()).
-	                                          "<br/>Account holder: ".$this->getGingerPaymentHolderName($response->toArray()).
-	                                          "<br/>City: ".$this->getGingerPaymentHolderCity($response->toArray()).
-	                                          "<br/>Country: ".$this->getGingerPaymentHolderCountry($response->toArray())
+			      'bank_information' => "IBAN: ".$this->getGingerPaymentIban($response).
+	                                          "<br/>BIC: ".$this->getGingerPaymentBic($response).
+	                                          "<br/>Account holder: ".$this->getGingerPaymentHolderName($response).
+	                                          "<br/>City: ".$this->getGingerPaymentHolderCity($response).
+	                                          "<br/>Country: ".$this->getGingerPaymentHolderCountry($response)
             ));
             $this->emptyCart(null, $virtuemart_order_id);
             vRequest::setVar('html', $html);
@@ -218,13 +215,9 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
 
         $gingerOrder = $this->getGingerClient()->getOrder($input['order_id']);
 
-        if (!$gingerOrder instanceof GingerPayments\Payment\Order) {
-            exit("Invalid order");
-        }
-
         $virtuemart_order_id = $this->getOrderIdByGingerOrder($input['order_id']);
 
-        $this->updateOrder($gingerOrder->getStatus(), $virtuemart_order_id);
+        $this->updateOrder($gingerOrder['status'], $virtuemart_order_id);
 
         exit();
     }

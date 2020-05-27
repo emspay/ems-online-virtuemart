@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="3.0" method="upgrade" group="vmpayment">
+    <name>EMS Online - WeChat</name>
+    <creationDate>11/01/2017</creationDate>
+    <version>1.1.0</version>
+    <author>Ginger Payments</author>
+    <authorEmail>plugins@gingerpayments.com</authorEmail>
+    <authorUrl>https://www.gingerpayments.com</authorUrl>
+    <copyright>Copyright 2018 - Ginger Payments B.V.</copyright>
+    <license>The MIT License (MIT)</license>
+    <description>PLG_VMPAYMENT_EMSPAYWECHAT_DESCRIPTION</description>
+    <files>
+        <filename plugin="emspaywechat">emspaywechat.php</filename>
+        <folder>language</folder>
+    </files>
+    <media folder="media" destination="../images/virtuemart/payment">
+	<filename>emspaywechat.png</filename>
+    </media>
+    <vmconfig>
+        <fields name="params">
+            <fieldset name="emspaywechat">
+                <field type="text" name="EMSPAY_API_KEY" value="{$EMSPAY_API_KEY}" default="" label="EMSPAY_API_KEY_TITLE" description="EMSPAY_API_KEY_EXPLAIN" />
+                <field name="EMSPAY_LIB_BUNDLE_CA_CERT" type="radio" default="1" label="EMSPAY_LIB_BUNDLE_CA_CERT_TITLE" description="EMSPAY_LIB_BUNDLE_CA_CERT_EXPLAIN">
+                    <option value="0">EMSPAY_LIB_NO</option>
+                    <option value="1">EMSPAY_LIB_YES</option>
+                </field> 
+                <field name="EMSPAY_ALLOW_NOTIFICATIONS_FROM_X" type="radio" default="1" label="EMSPAY_ALLOW_NOTIFICATIONS_FROM_X_TITLE" description="EMSPAY_ALLOW_NOTIFICATIONS_FROM_X_EXPLAIN">
+                    <option value="0">EMSPAY_LIB_NO</option>
+                    <option value="1">EMSPAY_LIB_YES</option>
+                </field> 
+                <field name="EMSPAY_STATUS_NEW" type="vmorderstate" scope="com_virtuemart" default="P" label="EMSPAY_STATUS_NEW_TITLE" description="EMSPAY_STATUS_NEW_EXPLAIN" />
+                <field name="EMSPAY_STATUS_PROCESSING" type="vmorderstate" scope="com_virtuemart" default="P" label="EMSPAY_STATUS_PROCESSING_TITLE" description="EMSPAY_STATUS_PROCESSING_EXPLAIN" />
+                <field name="EMSPAY_STATUS_ERROR"  type="vmorderstate" scope="com_virtuemart" default="X" label="EMSPAY_STATUS_ERROR_TITLE" description="EMSPAY_STATUS_ERROR_EXPLAIN" />
+                <field name="EMSPAY_STATUS_COMPLETED" type="vmorderstate" scope="com_virtuemart" default="F" label="EMSPAY_STATUS_COMPLETED_TITLE" description="EMSPAY_STATUS_COMPLETED_EXPLAIN" />
+                <field name="EMSPAY_STATUS_CANCELED"  type="vmorderstate" scope="com_virtuemart" default="X" label="EMSPAY_STATUS_CANCELED_TITLE" description="EMSPAY_STATUS_CANCELED_EXPLAIN" />
+                <field name="EMSPAY_STATUS_EXPIRED"  type="vmorderstate" scope="com_virtuemart" default="X" label="EMSPAY_STATUS_EXPIRED_TITLE" description="EMSPAY_STATUS_EXPIRED_EXPLAIN" />
+                <field name="EMSPAY_STATUS_CAPTURED"  type="vmorderstate" scope="com_virtuemart" default="S" label="EMSPAY_STATUS_CAPTURED_TITLE" description="EMSPAY_STATUS_CAPTURED_EXPLAIN" />
+                <field name="payment_logos" type="vmfiles" label="EMSPAY_LOGOS_TITLE"
+                       description="EMSPAY_LOGOS_TITLE_EXPLAIN"  multiple="true"
+                       directory="/images/virtuemart/payment"
+                       default="default" hide_default="1" hide_none="1"
+                       stripext="0" exclude="^_"/>
+            </fieldset>
+        </fields>
+    </vmconfig>
+</extension>
