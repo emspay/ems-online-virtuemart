@@ -44,6 +44,7 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
     public function __construct(& $subject, $config)
     {
         parent::__construct($subject, $config);
+	  $this->name = 'emspayklarnapaylater';
     }
 
     /**
