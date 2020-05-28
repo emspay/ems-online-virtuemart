@@ -18,3 +18,7 @@
 ** 1.0.7 **
 
 * Updated pkg_emspay directory and archive
+
+** 1.0.8 **
+
+* Remove vendor/ folder
