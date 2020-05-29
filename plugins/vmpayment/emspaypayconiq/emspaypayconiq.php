@@ -96,7 +96,7 @@ class plgVmPaymentEmspaypayconiq extends EmspayVmPaymentPlugin
 			'currency' => $currency_code_3,                             // Currency
 			'transactions' => [
 				[
-					'payment_method' => 'ideal'                     // Payment method
+					'payment_method' => 'payconiq'                  // Payment method
 				]
 			],
 			'merchant_order_id' => $orderId,                            // Merchant Order Id
