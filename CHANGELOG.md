@@ -22,3 +22,10 @@
 ** 1.0.8 **
 
 * Remove vendor/ folder
+
+** 1.1.1 **
+
+* Updated SDK
+* Add American Express
+* Add Tikkie Payment Request
+* Add WeChat
