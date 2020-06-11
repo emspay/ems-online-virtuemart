@@ -29,7 +29,7 @@ if (!class_exists('vmPSPlugin')) {
 }
 
 JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
-JImport('emspay.ems-php.vendor.autoload');
+JImport('emspay.ginger-php.vendor.autoload');
 JImport('emspay.emspayhelper');
 
 class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
@@ -44,6 +44,7 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
     public function __construct(& $subject, $config)
     {
         parent::__construct($subject, $config);
+	  $this->name = 'emspayklarnapaylater';
     }
 
     /**
@@ -265,31 +266,36 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
         $orderLines = $this->getOrderLines($cart, $currency_code_3);
+	  $returnUrl = EmspayHelper::getReturnUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
 
         try {
-            $response = $this->getGingerClient()->createKlarnaPayLaterOrder(
-                    $totalInCents,          // Amount in cents
-                    $currency_code_3,       // Currency
-                    $description,           // Description
-                    $orderId,               // Merchant Order Id
-                    null,                   // Return url
-                    null,                   // Expiration Period
-                    $customer->toArray(),   // Customer Information
-                    $plugin,                // Extra Information
-                    $webhook,               // WebHook URL
-                    $orderLines
-            );
+            $response = $this->getGingerClient()->createOrder([
+			'amount' => $totalInCents,                           // Amount in cents
+			'currency' => $currency_code_3,                      // Currency
+			'transactions' => [
+				[
+					'payment_method' => 'klarna-pay-later'   // Payment method
+				]
+			],
+			'merchant_order_id' => $orderId,                     // Merchant Order Id
+			'description' => $description,                       // Description
+			'return_url' => $returnUrl,                          // Return URL
+			'customer' => $customer->toArray(),                  // Customer Information
+			'extra' => ['plugin' => $plugin],                    // Extra information
+			'webhook_url' => $webhook,                           // Webhook URL
+			'order_lines' => $orderLines                         // Order lines
+		]);
         } catch (\Exception $exception) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$exception->getMessage()."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
-        if ($response->status()->isError()) {
-            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response->transactions()->current()->reason()->toString()."</p>";
+        if ($response['status'] == 'error') {
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response['transactions'][0]['reason']."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
 
-        if (!$response->getId()) {
+        if (!$response['id']) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: Response did not include id!</p>";
             $this->processFalseOrderStatusResponse($html);
         }
@@ -304,20 +310,20 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         $dbValues['email_currency'] = $email_currency;
         $dbValues['payment_order_total'] = $totalInPaymentCurrency['value'];
         $dbValues['tax_id'] = $method->tax_id;
-        $dbValues['ginger_order_id'] = $response->id()->toString();
+        $dbValues['ginger_order_id'] = $response['id'];
 
         $this->storePSPluginInternalData($dbValues);
 
-        $virtuemart_order_id = $this->getOrderIdByGingerOrder($response->getId());
+        $virtuemart_order_id = $this->getOrderIdByGingerOrder($response['id']);
 
-        $statusSucceeded = $this->updateOrder($response->getStatus(), $virtuemart_order_id);
+        $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_order_id);
 
         $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>";
         if ($statusSucceeded) {
             $this->emptyCart(null, $virtuemart_order_id);
             $html .= "<p>". JText::_('EMSPAY_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
             vRequest::setVar('html', $html);
-            return true;
+		JFactory::getApplication()->redirect($response['transactions'][0]['payment_url']);
         }
         $html .= "<p>" . JText::_("EMSPAY_LIB_ERROR_STATUS") . "</p>";
         $this->processFalseOrderStatusResponse($html);
@@ -353,7 +359,7 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         foreach ($cart->products as $product) {
             $orderLines[] = array_filter([
                 'name' => $product->product_name,
-                'type' => \GingerPayments\Payment\Order\OrderLine\Type::PHYSICAL,
+                'type' => EmspayHelper::PHYSICAL,
                 'amount' => EmspayHelper::getAmountInCents($product->prices['salesPrice']),
                 'currency' => $currency_code_3,
                 'quantity' => $product->quantity,
@@ -367,9 +373,9 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         if (isset($cart->cartPrices['salesPriceShipment']) && $cart->cartPrices['salesPriceShipment'] > 0) {
             $orderLines[] = array_filter([
                 'name' => isset($cart->cartData['shipmentName']) ? $cart->cartData['shipmentName'] : '',
-                'type' => \GingerPayments\Payment\Order\OrderLine\Type::SHIPPING_FEE,
+                'type' => EmspayHelper::SHIPPING_FEE,
                 'amount' => EmspayHelper::getAmountInCents($cart->cartPrices['salesPriceShipment']),
-                'currency' => \GingerPayments\Payment\Currency::EUR,
+                'currency' => EmspayHelper::getPaymentCurrency(),
                 'vat_percentage' => isset($cart->cartPrices[0]['VatTax']) ? $this->caclucalteVatTax($cart->cartPrices[0]['VatTax']) : 0,
                 'merchant_order_line_id' => $cart->virtuemart_shipmentmethod_id,
                 'quantity' => 1], function ($var) {
@@ -430,9 +436,9 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         try {
             if ($_formData->order_status === $this->methodParametersFactory()->statusCaptured() && $gingerOrderId = $this->getGingerOrderIdByOrderId($_formData->virtuemart_order_id)) {
                 $ginger = $this->getGingerClient();
-                $ginger->setOrderCapturedStatus(
-                        $ginger->getOrder($gingerOrderId)
-                );
+		    $ginger_order = $ginger->getOrder($gingerOrderId);
+		    $transaction_id = !empty(current($ginger_order['transactions'])) ? current($ginger_order['transactions'])['id'] : null;
+		    $ginger->captureOrderTransaction($ginger_order['id'],$transaction_id);
             }
         } catch (\Exception $ex) {
             JFactory::getApplication()->enqueueMessage($ex->getMessage(), 'error');
@@ -484,13 +490,9 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
 
         $gingerOrder = $this->getGingerClient()->getOrder($input['order_id']);
 
-        if (!$gingerOrder instanceof GingerPayments\Payment\Order) {
-            exit("Invalid order");
-        }
-
         $virtuemart_order_id = $this->getOrderIdByGingerOrder($input['order_id']);
 
-        $this->updateOrder($gingerOrder->getStatus(), $virtuemart_order_id);
+        $this->updateOrder($gingerOrder['status'], $virtuemart_order_id);
 
         exit();
     }
@@ -498,22 +500,21 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
     /**
      * create a client instance
      *
-     * @return \GingerPayments\Payment\Client
+     * @return \Ginger\ApiClient
      * @since v1.0.0
      */
     protected function getGingerClient()
     {
         $params = $this->methodParametersFactory();
 
-        $ginger = \GingerPayments\Payment\Ginger::createClient(
-                        $params->getKlarnaPayLaterApiKey()
-        );
-
-        if ($params->bundleCaCert() == true) {
-            $ginger->useBundledCA();
-        }
-        
-        return $ginger;
+        return \Ginger\Ginger::createClient(
+		  \EmspayHelper::GINGER_ENDPOINT,
+		  $params->getAfterpayApiKey(),
+		  ($params->bundleCaCert() == true) ?
+			  [
+				  CURLOPT_CAINFO => \EmspayHelper::getCaCertPath()
+			  ] : []
+	  );
     }
 
     /**

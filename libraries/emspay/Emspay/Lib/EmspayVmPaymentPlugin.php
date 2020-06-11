@@ -2,7 +2,9 @@
 
 namespace Emspay\Lib;
 
-use Emspay\Lib\PaymentParametersFactory;
+require_once(JPATH_LIBRARIES . '/emspay/ginger-php/vendor/autoload.php');
+
+use Ginger\Ginger;
 
 /**
  *   ╲          ╱
@@ -242,21 +244,22 @@ abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
     /**
      * Create a client instance
      * 
-     * @return \GingerPayments\Payment\Client
+     * @return \Ginger\ApiClient
      * @since v1.0.0
      */
     protected function getGingerClient() 
     {
         $params = $this->methodParametersFactory();
-        $ginger = \GingerPayments\Payment\Ginger::createClient(
-                        $params->apiKey()
-        );
+
+        return Ginger::createClient(
+		  \EmspayHelper::GINGER_ENDPOINT,
+		  $params->apiKey(),
+		  ($params->bundleCaCert() == true) ?
+			  [
+				  CURLOPT_CAINFO => \EmspayHelper::getCaCertPath()
+			  ] : []
+	  );
        
-        if ($params->bundleCaCert() == true) { 
-            $ginger->useBundledCA();
-        }
-       
-        return $ginger;
     }
     
     /**

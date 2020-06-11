@@ -10,7 +10,7 @@
     <license>The MIT License (MIT)</license>
     <authorEmail>plugins@gingerpayments.com</authorEmail>
     <authorUrl>https://www.gingerpayments.com</authorUrl>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <files folder="extensions">
         <file id="emspay" type="library">emspay.zip</file>
         <file id="emspayapplepay" type="plugin" group="vmpayment">emspayapplepay.zip</file>
@@ -23,5 +23,8 @@
         <file id="emspaypaypal" type="plugin" group="vmpayment">emspaypaypal.zip</file>
         <file id="emspayklarnapaynow" type="plugin" group="vmpayment">emspayklarnapaynow.zip</file>
         <file id="emspaypayconiq" type="plugin" group="vmpayment">emspaypayconiq.zip</file>
+        <file id="emspayamex" type="plugin" group="vmpayment">emspayamex.zip</file>
+        <file id="emspaytikkiepaymentrequest" type="plugin" group="vmpayment">emspaytikkiepaymentrequest.zip</file>
+        <file id="emspaywechat" type="plugin" group="vmpayment">emspaywechat.zip</file>
     </files>
 </extension>

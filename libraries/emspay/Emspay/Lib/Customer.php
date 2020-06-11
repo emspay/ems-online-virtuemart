@@ -86,7 +86,7 @@ class Customer {
                 $response[$key] = $value;
             } 
         }
-        return   \GingerPayments\Payment\Common\ArrayFunctions::withoutNullValues($response);
+        return \EmspayHelper::withoutNullValues($response);
     }
 
 }

@@ -2,7 +2,7 @@
 <extension type="plugin" version="3.0" method="upgrade" group="vmpayment">
     <name>EMS Online - AfterPay</name>
     <creationDate>02/01/2017</creationDate>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <author>Ginger Payments</author>
     <authorEmail>plugins@gingerpayments.com</authorEmail>
     <authorUrl>https://www.gingerpayments.com</authorUrl>
@@ -13,7 +13,7 @@
         <filename plugin="emspayafterpay">emspayafterpay.php</filename>
         <folder>language</folder>
     </files>
-    <media folder="media" destination="../images/virtuemart/payment">
+    <media folder="media" destination="/images/virtuemart/payment">
 	<filename>emspayafterpay.png</filename>
     </media>
     <vmconfig>
