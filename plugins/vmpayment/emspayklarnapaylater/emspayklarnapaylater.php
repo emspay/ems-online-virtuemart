@@ -323,7 +323,7 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
             $this->emptyCart(null, $virtuemart_order_id);
             $html .= "<p>". JText::_('EMSPAY_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
             vRequest::setVar('html', $html);
-            return true;
+		JFactory::getApplication()->redirect($response['transactions'][0]['payment_url']);
         }
         $html .= "<p>" . JText::_("EMSPAY_LIB_ERROR_STATUS") . "</p>";
         $this->processFalseOrderStatusResponse($html);

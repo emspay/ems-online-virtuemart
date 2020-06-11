@@ -23,7 +23,7 @@
 
 * Remove vendor/ folder
 
-** 1.1.1 **
+** 1.2.0 **
 
 * Updated SDK
 * Add American Express

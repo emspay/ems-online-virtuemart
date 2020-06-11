@@ -140,7 +140,6 @@ class plgVmPaymentEmspaypayconiq extends EmspayVmPaymentPlugin
 
         $this->storePSPluginInternalData($dbValues);
 
-        JFactory::getApplication()->redirect($response['transactions'][0]['payment_url']);
     }
 
     /**
