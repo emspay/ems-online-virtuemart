@@ -90,7 +90,7 @@ class plgVmPaymentEmspayKlarnaPayNow extends EmspayVmPaymentPlugin
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
         
         try {
-            $response = $this->getGingerClient()->createOrder([
+            $response = $this->getGingerClient()->createOrder(array_filter([
 			'amount' => $totalInCents,                                  // Amount in cents
 			'currency' => $currency_code_3,                             // Currency
 			'transactions' => [
@@ -104,7 +104,7 @@ class plgVmPaymentEmspayKlarnaPayNow extends EmspayVmPaymentPlugin
 			'customer' => $customer->toArray(),                         // Customer Information
 			'extra' => ['plugin' => $plugin],                           // Extra information
 			'webhook_url' => $webhook,                                  // Webhook URL
-		]);
+		]));
         } catch (\Exception $exception) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$exception->getMessage()."</p>";
             $this->processFalseOrderStatusResponse($html);
