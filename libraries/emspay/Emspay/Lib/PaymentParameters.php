@@ -26,7 +26,7 @@ class PaymentParameters
         'EMSPAY_ALLOWED_IP_ADDRESSES' => 'allowedIpAddresses',
         'EMSPAY_TEST_API_KEY' => 'testApiKey',
         'EMSPAY_AFTERPAY_TEST_APIKEY' => 'afterpayTestApiKey',
-        'EMSPAY_ALLOWED_IP_ADDRESSES' => 'afterpayAllowedIpAddresses'
+        'EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES' => 'afterpayAllowedIpAddresses'
     ];
     private $apiKey;
     private $bundleCaCert;
