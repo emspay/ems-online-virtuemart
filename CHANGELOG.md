@@ -29,3 +29,7 @@
 * Add American Express
 * Add Tikkie Payment Request
 * Add WeChat
+
+** 1.2.1 ** 
+
+* Adding a data filter before sending it to the API

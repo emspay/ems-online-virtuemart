@@ -17,7 +17,7 @@ use Emspay\Lib\EmspayVmPaymentPlugin;
  * @category    Ginger
  * @package     Ginger Virtuemart
  * @author      Ginger Payments B.V. (plugins@gingerpayments.com)
- * @version     v1.1.0
+ * @version     v1.2.1
  * @copyright   COPYRIGHT (C) 2018 GINGER PAYMENTS B.V.
  * @license     The MIT License (MIT)
  * @since       v1.1.0
