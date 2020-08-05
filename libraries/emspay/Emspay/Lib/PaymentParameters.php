@@ -26,7 +26,8 @@ class PaymentParameters
         'EMSPAY_ALLOWED_IP_ADDRESSES' => 'allowedIpAddresses',
         'EMSPAY_TEST_API_KEY' => 'testApiKey',
         'EMSPAY_AFTERPAY_TEST_APIKEY' => 'afterpayTestApiKey',
-        'EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES' => 'afterpayAllowedIpAddresses'
+        'EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES' => 'afterpayAllowedIpAddresses',
+        'EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE' => 'afterpayAllowedCountries'
     ];
     private $apiKey;
     private $bundleCaCert;
@@ -44,6 +45,7 @@ class PaymentParameters
     private $testApiKey;
     private $afterpayTestApiKey;
     private $afterpayAllowedIpAddresses;
+    private $afterpayAllowedCountries;
 
     public function apiKey() 
     {
@@ -150,6 +152,23 @@ class PaymentParameters
         return $addresses;        
     }
 
+    /**
+     * countries available for afterpay
+     *
+     * @return null|array
+     */
+    public function afterpayAllowedCountries()
+    {
+        if (empty($this->afterpayAllowedCountries)) {
+            return null;
+        }
+        $countries =explode(",", str_replace(' ','', $this->afterpayAllowedCountries));
+        array_walk($countries,
+                function(&$val) {
+                    return trim($val);
+                });
+        return $countries;
+    }
     
     public function testApiKey() 
     {

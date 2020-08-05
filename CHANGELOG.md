@@ -33,3 +33,4 @@
 ** 1.2.1 ** 
 
 * Adding a data filter before sending it to the API
+* Added the ability for AfterPay to be available in the selected countries.

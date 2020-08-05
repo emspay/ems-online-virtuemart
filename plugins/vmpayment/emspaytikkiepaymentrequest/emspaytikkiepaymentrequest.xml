@@ -13,7 +13,7 @@
         <filename plugin="emspaytikkiepaymentrequest">emspaytikkiepaymentrequest.php</filename>
         <folder>language</folder>
     </files>
-    <media folder="media" destination="/images/virtuemart/payment">
+    <media folder="media" destination="../images/virtuemart/payment">
 	<filename>emspaytikkiepaymentrequest.png</filename>
     </media>
     <vmconfig>
