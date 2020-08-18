@@ -160,14 +160,11 @@ class PaymentParameters
     public function afterpayAllowedCountries()
     {
         if (empty($this->afterpayAllowedCountries)) {
-            return null;
+            return $this->afterpayAllowedCountries;
+        } else {
+            $expCountries = array_map("trim", explode(',', $this->afterpayAllowedCountries));
+            return $expCountries;
         }
-        $countries =explode(",", str_replace(' ','', $this->afterpayAllowedCountries));
-        array_walk($countries,
-                function(&$val) {
-                    return trim($val);
-                });
-        return $countries;
     }
     
     public function testApiKey() 

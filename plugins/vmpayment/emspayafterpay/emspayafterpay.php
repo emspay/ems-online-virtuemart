@@ -129,7 +129,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
      */
     protected function userIsFromAllowedCountries($country)
     {
-        if (is_null($this->methodParametersFactory()->afterpayAllowedCountries())) {
+        if (empty($this->methodParametersFactory()->afterpayAllowedCountries())) {
             return true;
         } else {
             return in_array(strtoupper($country), $this->methodParametersFactory()->afterpayAllowedCountries());
@@ -194,6 +194,10 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
      */
     public function plgVmOnCheckoutCheckDataPayment(VirtueMartCart $cart)
     {
+        if(!$this->userIsFromAllowedCountries($cart->BTaddress['fields']['virtuemart_country_id']['country_2_code'])) {
+            return false;
+        }
+
         if (!$this->selectedThisByMethodId($cart->virtuemart_paymentmethod_id)) {
             return null; // Another method was selected, do nothing
         }
