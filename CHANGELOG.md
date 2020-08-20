@@ -33,3 +33,4 @@
 ** 1.2.1 ** 
 
 * Adding a data filter before sending it to the API
+* Klarna-Pay-Later: Remove fields gender and birthday from checkout form and customer object
