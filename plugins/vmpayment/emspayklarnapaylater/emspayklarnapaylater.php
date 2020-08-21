@@ -69,18 +69,15 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         }
         $method_name = $this->_psType . '_name';
         vmLanguage::loadJLang('com_virtuemart', true);
-        $htmla = array();
-        $html = '';
         foreach ($this->methods as $this->_currentMethod) {
             if ($this->checkConditions($cart, $this->_currentMethod, $cart->cartPrices)) {
                 $cartPrices = $cart->cartPrices;
                 $methodSalesPrice = $this->setCartPrices($cart, $cartPrices, $this->_currentMethod);
                 $this->_currentMethod->$method_name = $this->renderPluginName($this->_currentMethod);
                 $html = $this->getPluginHtml($this->_currentMethod, $selected, $methodSalesPrice);
-                $htmla[] = $html . '<br />';
+                $htmlIn[] = [$html];
             }
         }
-        $htmlIn[] = $htmla;
         return $this->isPaymentSelected($selected);
     }
 
@@ -206,7 +203,7 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         $customer = \Emspay\Lib\CommonCustomerFactory::create(
                         $order['details']['BT'],
                         \EmspayHelper::getLocale(),
-                        filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP),
+                        filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP)
         );
 
         $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
@@ -274,22 +271,6 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         $html .= "<p>" . JText::_("EMSPAY_LIB_ERROR_STATUS") . "</p>";
         $this->processFalseOrderStatusResponse($html);
     }
-
-    /**
-     * Convert date to Klarna Pay Later requested format
-     *
-     * @param string $stringDate
-     * @return string
-     */
-    protected function convertDateToKlarnaPayLaterFormat($stringDate)
-    {
-        if (preg_match('/^(\d{2})-(\d{2})-(\d{4})$/', $stringDate, $matches)) {
-            $date =  DateTime::createFromFormat('d-m-Y', $stringDate);
-            return $date->format('Y-m-d');
-        }
-        return null;
-    }
-
 
     /**
      *
