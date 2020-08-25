@@ -87,7 +87,7 @@ class plgVmPaymentEmspayapplepay extends EmspayVmPaymentPlugin
                         \EmspayHelper::getLocale(),
                         filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP)
         );
-        $plugin = ['plugin' => EmspayHelper::getPluginVersion('emspayapplepay')];
+        $plugin = ['plugin' => EmspayHelper::getPluginVersion()];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
         
         try {

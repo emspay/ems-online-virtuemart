@@ -336,7 +336,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
                         $this->convertDateToAcceptedFormat(\JFactory::getSession()->get('emspayafterpay_dob', null, 'vm'))
         );
 
-        $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
+        $plugin = ['plugin' => EmspayHelper::getPluginVersion()];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
         $orderLines = $this->getOrderLines($cart, $currency_code_3);
 	  $returnUrl = EmspayHelper::getReturnUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
