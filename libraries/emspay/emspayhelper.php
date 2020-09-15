@@ -39,7 +39,7 @@ class EmspayHelper
      * @return string
      * @since v1.0.0
      */
-    public static function getPluginVersion($name)
+    public static function getPluginVersion()
     {
         $xml = JFactory::getXML(JPATH_SITE."/administrator/manifests/libraries/emspay.xml");
 

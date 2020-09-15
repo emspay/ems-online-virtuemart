@@ -30,8 +30,9 @@
 * Add Tikkie Payment Request
 * Add WeChat
 
-** 1.2.1 ** 
+** 1.3.0 ** 
 
 * Adding a data filter before sending it to the API
 * Klarna-Pay-Later: Remove fields gender and birthday from checkout form and customer object
 * Added the ability for AfterPay to be available in the selected countries.
+* Replaced locally stored ginger-php library on composer library installer.
