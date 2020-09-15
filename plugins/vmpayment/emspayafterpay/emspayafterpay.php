@@ -208,18 +208,28 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
         
         $app = JFactory::getApplication();
         $dob = $app->getSession()->get('emspayafterpay_dob', null, 'vm');
-        if ($this->isValidDate($dob) === false) {
+        if ($dob === null) {
             $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_INVALID_DATE_ERROR"), 'error');
-            $app->getSession()->clear('emspayafterpay_dob', 'vm');
-            $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
+        } else {
+            if ($this->isValidDate($dob) === false) {
+                $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_INVALID_DATE_ERROR"), 'error');
+                $app->getSession()->clear('emspayafterpay_dob', 'vm');
+                $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
+                return false;
+            }
         }
         $tc = $app->getSession()->get('emspayafterpay_terms_and_confditions', null, 'vm');
-        if ($tc != 'on') {
+        if ($tc == null ) {
             $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_PLEASE_ACCEPT_TC"), 'error');
-            $app->getSession()->clear('emspayafterpay_terms_and_confditions', 'vm');
-            $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
+        } else {
+            if ($tc != 'on') {
+                $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_PLEASE_ACCEPT_TC"), 'error');
+                $app->getSession()->clear('emspayafterpay_terms_and_confditions', 'vm');
+                $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
+                return false;
+            }
         }
         return true;
     }
