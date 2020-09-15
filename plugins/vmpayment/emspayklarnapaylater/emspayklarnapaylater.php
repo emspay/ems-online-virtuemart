@@ -69,18 +69,15 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         }
         $method_name = $this->_psType . '_name';
         vmLanguage::loadJLang('com_virtuemart', true);
-        $htmla = array();
-        $html = '';
         foreach ($this->methods as $this->_currentMethod) {
             if ($this->checkConditions($cart, $this->_currentMethod, $cart->cartPrices)) {
                 $cartPrices = $cart->cartPrices;
                 $methodSalesPrice = $this->setCartPrices($cart, $cartPrices, $this->_currentMethod);
                 $this->_currentMethod->$method_name = $this->renderPluginName($this->_currentMethod);
                 $html = $this->getPluginHtml($this->_currentMethod, $selected, $methodSalesPrice);
-                $htmla[] = $html . '<br />' . $this->customInfoHTML();
+                $htmlIn[] = [$html];
             }
         }
-        $htmlIn[] = $htmla;
         return $this->isPaymentSelected($selected);
     }
 
@@ -99,31 +96,6 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         }
         return false;
     }
-
-    /**
-     * generate html for the gender selectbox
-     *
-     * @return string
-     * @since v1.0.0
-     */
-    public function customInfoHTML()
-    {
-        $html = JText::_('PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_SELECT_GENDER') . ' <br/>';
-        $html .= '<select name="gender" id="' . $this->name . '" class="' . $this->name . '">';
-        $html .= '<option value="male" '
-                . (JFactory::getSession()->get('emspayklarnapaylater_gender') == 'male' ? " selected" : "") . '>'
-                . JText::_('PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_SELECT_GENDER_MALE') . '</option>';
-        $html .= '<option value="female" '
-                . (JFactory::getSession()->get('emspayklarnapaylater_gender') == 'male' ? " selected" : "") . '>'
-                . JText::_('PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_SELECT_GENDER_FEMALE') . '</option>';
-        $html .= "</select><br/>";
-        $html .= JText::_('PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_ENTER_DOB') . '<br>';
-        $html .= '<input type="text" name="dob" value="' . JFactory::getSession()->get('emspayklarnapaylater_dob', null, 'vm') . '"/>';
-        $html .= '<i>('.JText::_("PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_DATE_FORMAT").')</i>';
-        
-        return $html;
-    }
-
             
     /**
      * This is for checking the input data of the payment method within the checkout
@@ -139,15 +111,6 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         }
 
         if (!($this->_currentMethod = $this->getVmPluginMethod($cart->virtuemart_paymentmethod_id))) {
-            return false;
-        }
-        
-        $app = JFactory::getApplication();
-        $dob = $app->getSession()->get('emspayklarnapaylater_dob', null, 'vm');
-        if ($this->isValidDate($dob) === false) {
-            $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYKLARNAPAYLATER_MESSAGE_INVALID_DATE_ERROR"), 'error');
-            $app->getSession()->clear('emspayklarnapaylater_dob', 'vm');
-            $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
         }
         return true;
@@ -171,25 +134,7 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         if (!($currentMethod = $this->getVmPluginMethod($cart->virtuemart_paymentmethod_id))) {
             return false;
         }
-        JFactory::getSession()->set('emspayklarnapaylater_gender', vRequest::getVar('gender'), 'vm');
-        JFactory::getSession()->set('emspayklarnapaylater_dob', vRequest::getVar('dob'), 'vm');
-
         return true;
-    }
-
-    /**
-     * validate date of birth
-     *
-     * @param type $string
-     * @return boolean
-     * @since v1.0.0
-     */
-    protected function isValidDate($string)
-    {
-        if (preg_match('/^(\d{2})-(\d{2})-(\d{4})$/', $string, $matches)) {
-            return DateTime::createFromFormat('d-m-Y', $string) instanceof \DateTime;
-        }
-        return false;
     }
 
     /**
@@ -258,12 +203,10 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         $customer = \Emspay\Lib\CommonCustomerFactory::create(
                         $order['details']['BT'],
                         \EmspayHelper::getLocale(),
-                        filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP),
-                        \JFactory::getSession()->get('emspayklarnapaylater_gender', null, 'vm'),
-                        $this->convertDateToKlarnaPayLaterFormat(\JFactory::getSession()->get('emspayklarnapaylater_dob', null, 'vm'))
+                        filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP)
         );
 
-        $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
+        $plugin = ['plugin' => EmspayHelper::getPluginVersion()];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
         $orderLines = $this->getOrderLines($cart, $currency_code_3);
 	  $returnUrl = EmspayHelper::getReturnUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
@@ -330,22 +273,6 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
     }
 
     /**
-     * Convert date to Klarna Pay Later requested format
-     *
-     * @param string $stringDate
-     * @return string
-     */
-    protected function convertDateToKlarnaPayLaterFormat($stringDate)
-    {
-        if (preg_match('/^(\d{2})-(\d{2})-(\d{4})$/', $stringDate, $matches)) {
-            $date =  DateTime::createFromFormat('d-m-Y', $stringDate);
-            return $date->format('Y-m-d');
-        }
-        return null;
-    }
-
-
-    /**
      *
      * @param VirtuemartCart $cart
      * @param string $currency_code_3
@@ -404,18 +331,6 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         return round(0, 2);
     }
 
-    /**
-     * clear user seesion data
-     * @since v1.0.0
-     */
-    protected function clearSessionData()
-    {
-        $session = JFactory::getSession();
-        $session->clear('emspayklarnapaylater_gender', 'vm');
-        $session->clear('emspayklarnapaylater_dob', 'vm');
-    }
-
-    
     /**
      * on order status shipped
      *

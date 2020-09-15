@@ -33,4 +33,5 @@
 ** 1.2.1 ** 
 
 * Adding a data filter before sending it to the API
+* Klarna-Pay-Later: Remove fields gender and birthday from checkout form and customer object
 * Added the ability for AfterPay to be available in the selected countries.

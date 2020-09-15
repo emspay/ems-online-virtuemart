@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" version="3.0" method="upgrade" group="vmpayment">
     <name>EMS Online - Credit Card</name>
-    <creationDate>31/07/2020</creationDate>
-    <version>1.2.1</version>
+    <creationDate>08/21/2020</creationDate>
     <author>Ginger Payments</author>
     <authorEmail>plugins@gingerpayments.com</authorEmail>
     <authorUrl>https://www.gingerpayments.com</authorUrl>

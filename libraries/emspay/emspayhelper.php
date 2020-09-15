@@ -41,7 +41,7 @@ class EmspayHelper
      */
     public static function getPluginVersion($name)
     {
-        $xml = JFactory::getXML(JPATH_SITE."/plugins/vmpayment/{$name}/{$name}.xml");
+        $xml = JFactory::getXML(JPATH_SITE."/administrator/manifests/libraries/emspay.xml");
 
         return sprintf('Joomla Virtuemart v%s', (string) $xml->version);
     }
