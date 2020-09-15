@@ -37,8 +37,6 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
     const TERMS_CONDITION_URL_NL = 'https://www.afterpay.nl/nl/algemeen/betalen-met-afterpay/betalingsvoorwaarden';
     const TERMS_CONDITION_URL_BE = 'https://www.afterpay.be/be/footer/betalen-met-afterpay/betalingsvoorwaarden';
     const BE_ISO_CODE = 'BE';
-        
-    protected static $allowedCountries = ['NL', 'BE'];
 
     /**
      * Constructor
@@ -49,7 +47,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
     public function __construct(& $subject, $config)
     {
         parent::__construct($subject, $config);
-	  $this->name = 'emspayafterpay';
+	    $this->name = 'emspayafterpay';
     }
 
     /**
@@ -63,6 +61,11 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
      */
     public function plgVmDisplayListFEPayment(VirtueMartCart $cart, $selected = 0, &$htmlIn)
     {
+        $country = shopFunctions::getCountryByID($cart->BT['virtuemart_country_id'], 'country_2_code');
+
+        if (!$this->userIsFromAllowedCountries($country)) {
+            return false;
+        }
         if ($this->isSetShowForIpFilter() && !$this->addressIsAllowed()) {
             return false;
         }
@@ -87,8 +90,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
                 $methodSalesPrice = $this->setCartPrices($cart, $cartPrices, $this->_currentMethod);
                 $this->_currentMethod->$method_name = $this->renderPluginName($this->_currentMethod);
                 $html = $this->getPluginHtml($this->_currentMethod, $selected, $methodSalesPrice);
-                $country = shopFunctions::getCountryByID($cart->BT['virtuemart_country_id'], 'country_2_code');
-                $htmla[] = $html . '<br />' . ($this->userIsFromAllowedCountries($country) ? $this->customInfoHTML($country) : $this->displayWarningHtml());
+                $htmla[] = $html . '<br />' . $this->customInfoHTML($country);
             }
         }
         $htmlIn[] = $htmla;
@@ -120,15 +122,18 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
     }
     
     /**
-     * checks is user form NL or BE
+     * checks is user form allowed countries
      *
-     * @param VirtueMartCart $cart
      * @return boolean
      * @since v1.1.0
      */
     protected function userIsFromAllowedCountries($country)
     {
-        return in_array(strtoupper($country), static::$allowedCountries);
+        if (empty($this->methodParametersFactory()->afterpayAllowedCountries())) {
+            return true;
+        } else {
+            return in_array(strtoupper($country), $this->methodParametersFactory()->afterpayAllowedCountries());
+        }
     }
 
     /**
@@ -179,18 +184,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
         }
         return self::TERMS_CONDITION_URL_NL;
     }
-    
-    /**
-     * generate html message if user is nnot from allowed countries
-     *
-     * @return string
-     * @since v1.1.0
-     */
-    public function displayWarningHtml()
-    {
-        return JText::_('PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_AFTERPAY_INTENDED_TO_BE_USED') . ' <br/>';
-    }
-            
+
     /**
      * This is for checking the input data of the payment method within the checkout
      *
@@ -200,6 +194,10 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
      */
     public function plgVmOnCheckoutCheckDataPayment(VirtueMartCart $cart)
     {
+        if(!$this->userIsFromAllowedCountries($cart->BTaddress['fields']['virtuemart_country_id']['country_2_code'])) {
+            return false;
+        }
+
         if (!$this->selectedThisByMethodId($cart->virtuemart_paymentmethod_id)) {
             return null; // Another method was selected, do nothing
         }
@@ -228,8 +226,6 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
 
     /**
      * This is for adding the input data of the payment method to the cart, after selecting
-     *
-     * @author Valerie Isaksen
      *
      * @param VirtueMartCart $cart
      * @return null if payment not selected; true if infos are correct
@@ -339,7 +335,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
         $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
         $orderLines = $this->getOrderLines($cart, $currency_code_3);
-	  $returnUrl = EmspayHelper::getReturnUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
+	    $returnUrl = EmspayHelper::getReturnUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
 
         try {
 		$response = $this->getGingerClient()->createOrder(array_filter([
@@ -632,6 +628,9 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
 
     public function plgVmSetOnTablePluginParamsPayment($name, $id, &$table)
     {
+        if ($name == "emspayafterpay") {
+            $table->EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE = "NL, BE";
+        }
         return $this->setOnTablePluginParams($name, $id, $table);
     }
 }

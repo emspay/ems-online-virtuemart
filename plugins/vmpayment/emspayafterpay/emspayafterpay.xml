@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" version="3.0" method="upgrade" group="vmpayment">
     <name>EMS Online - AfterPay</name>
-    <creationDate>31/07/2020</creationDate>
+    <creationDate>02/01/2017</creationDate>
     <version>1.2.1</version>
     <author>Ginger Payments</author>
     <authorEmail>plugins@gingerpayments.com</authorEmail>
@@ -13,7 +13,7 @@
         <filename plugin="emspayafterpay">emspayafterpay.php</filename>
         <folder>language</folder>
     </files>
-    <media folder="media" destination="/images/virtuemart/payment">
+    <media folder="media" destination="../images/virtuemart/payment">
 	<filename>emspayafterpay.png</filename>
     </media>
     <vmconfig>
@@ -22,6 +22,7 @@
                 <field type="text" name="EMSPAY_API_KEY" value="{$EMSPAY_API_KEY}" default="" label="EMSPAY_API_KEY_TITLE" description="EMSPAY_API_KEY_EXPLAIN" />
                 <field type="text" name="EMSPAY_AFTERPAY_TEST_APIKEY" value="{$EMSPAY_AFTERPAY_TEST_APIKEY}" default="" label="EMSPAY_AFTERPAY_TEST_APIKEY_TITLE" description="EMSPAY_AFTERPAY_TEST_APIKEY_EXPLAIN" />
                 <field name="EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES" type="text" value="{$EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES}" default="" label="EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES_TITLE" description="EMSPAY_AFTERPAY_ALLOWED_IP_ADDRESSES_EXPLAIN" />
+                <field name="EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE" type="text" value="{EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE}" default="" label="EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_TITLE" description="EMSPAY_AFTERPAY_COUNTRIES_AVAILABLE_EXPLAIN" />
                 <field name="EMSPAY_LIB_BUNDLE_CA_CERT" type="radio" default="1" label="EMSPAY_LIB_BUNDLE_CA_CERT_TITLE" description="EMSPAY_LIB_BUNDLE_CA_CERT_EXPLAIN">
                     <option value="0">EMSPAY_LIB_NO</option>
                     <option value="1">EMSPAY_LIB_YES</option>
