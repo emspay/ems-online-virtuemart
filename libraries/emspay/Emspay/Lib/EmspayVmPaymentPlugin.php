@@ -2,7 +2,7 @@
 
 namespace Emspay\Lib;
 
-require_once(JPATH_LIBRARIES . '/emspay/ginger-php/vendor/autoload.php');
+require_once(JPATH_LIBRARIES . '/emspay/vendor/autoload.php');
 
 use Ginger\Ginger;
 

@@ -12,7 +12,9 @@
     <libraryname>emspay</libraryname>
     <files>
         <filename>emspayhelper.php</filename>
-        <folder>ginger-php</folder>
+        <filename>composer.json</filename>
+        <filename>composer.lock</filename>
+        <folder>assets</folder>
         <folder>language</folder>
         <folder>Emspay</folder>
     </files>
