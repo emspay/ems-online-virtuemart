@@ -222,7 +222,7 @@ abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
     }
     
     /**
-     * fetch vm order id form hte payment table
+     * fetch vm order id for the payment table
      * 
      * @param type $gingerOrderId
      * @return int
@@ -241,7 +241,7 @@ abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
     }
 
     /**
-     * fetch vm order number form hte payment table
+     * fetch vm order number for the payment table
      *
      * @param type $gingerOrderId
      * @return string

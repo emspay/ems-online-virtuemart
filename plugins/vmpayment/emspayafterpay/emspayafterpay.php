@@ -195,10 +195,12 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
      */
     public function plgVmOnCheckoutCheckDataPayment(VirtueMartCart $cart)
     {
-        if(!$cart->cartData['paymentName'] = 'AfterPay'){
+        if($cart->cartData['paymentName'] == '<span class="vmpayment_name">AfterPay</span>'){
             if(!$this->userIsFromAllowedCountries($cart->BTaddress['fields']['virtuemart_country_id']['country_2_code'])) {
                 return false;
             }
+        } else {
+            return null;
         }
 
         if (!$this->selectedThisByMethodId($cart->virtuemart_paymentmethod_id)) {
