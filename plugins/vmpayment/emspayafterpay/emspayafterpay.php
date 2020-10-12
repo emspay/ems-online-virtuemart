@@ -195,8 +195,10 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
      */
     public function plgVmOnCheckoutCheckDataPayment(VirtueMartCart $cart)
     {
-        if(!$this->userIsFromAllowedCountries($cart->BTaddress['fields']['virtuemart_country_id']['country_2_code'])) {
-            return false;
+        if(!$cart->cartData['paymentName'] = 'AfterPay'){
+            if(!$this->userIsFromAllowedCountries($cart->BTaddress['fields']['virtuemart_country_id']['country_2_code'])) {
+                return false;
+            }
         }
 
         if (!$this->selectedThisByMethodId($cart->virtuemart_paymentmethod_id)) {
