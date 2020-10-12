@@ -258,10 +258,11 @@ class plgVmPaymentEmspayklarnaPayLater extends EmspayVmPaymentPlugin
         $this->storePSPluginInternalData($dbValues);
 
         $virtuemart_order_id = $this->getOrderIdByGingerOrder($response['id']);
+        $virtuemart_order_number = $this->getOrderNumberByGingerOrder(vRequest::get('order_id'));
 
         $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_order_id);
 
-        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>";
+        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_number) . "</p>";
         if ($statusSucceeded) {
             $this->emptyCart(null, $virtuemart_order_id);
             $html .= "<p>". JText::_('EMSPAY_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";

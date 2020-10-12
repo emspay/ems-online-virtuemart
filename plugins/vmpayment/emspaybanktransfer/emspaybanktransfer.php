@@ -139,6 +139,7 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
         $this->storePSPluginInternalData($dbValues);
 
         $virtuemart_order_id = $this->getOrderIdByGingerOrder($response['id']);
+        $virtuemart_order_number = $this->getOrderNumberByGingerOrder(vRequest::get('order_id'));
         $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_order_id);
 
         if ($statusSucceeded) {
@@ -156,7 +157,7 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
             vRequest::setVar('html', $html);
             return true;
         }
-        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>".
+        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_number) . "</p>".
                 "<p>" . JText::_("EMSPAY_LIB_ERROR_STATUS") . "</p>";
         $this->processFalseOrderStatusResponse($html);
     }

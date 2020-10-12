@@ -239,7 +239,25 @@ abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
         }
         return 0;
     }
-    
+
+    /**
+     * fetch vm order number form hte payment table
+     *
+     * @param type $gingerOrderId
+     * @return string
+     * @since v1.0.0
+     */
+    protected function getOrderNumberByGingerOrder($gingerOrderId)
+    {
+        $query = "SELECT `order_number` FROM " . $this->_tablename . "  WHERE `ginger_order_id` = '" . $gingerOrderId . "'";
+        $db = \JFactory::getDBO();
+        $db->setQuery($query);
+        $r = $db->loadObject();
+        if (is_object($r)) {
+            return (string) $r->order_number;
+        }
+        return 0;
+    }
     
     /**
      * Create a client instance
