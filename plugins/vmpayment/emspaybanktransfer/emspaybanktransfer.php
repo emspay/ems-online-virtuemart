@@ -138,22 +138,22 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
 
         $this->storePSPluginInternalData($dbValues);
 
-        $virtuemart_ems_order_id = $this->getOrderIdByGingerOrder($response['id']);
+        $virtuemart_order_id = $this->getOrderIdByGingerOrder($response['id']);
         $virtuemart_order_number = $this->getOrderNumberByGingerOrder(vRequest::get('order_id'));
-        $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_ems_order_id);
+        $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_order_id);
 
         if ($statusSucceeded) {
             $html = $this->renderByLayout('post_payment', array(
                         'total_to_pay' => $totalInPaymentCurrency['display'],
                         'reference' => $this->getGingerPaymentReference($response),
-                        'description' => "<p>" . EmspayHelper::getOrderDescription($virtuemart_ems_order_id) . "</p>",
+                        'description' => "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>",
 			      'bank_information' => "IBAN: ".$this->getGingerPaymentIban($response).
 	                                          "<br/>BIC: ".$this->getGingerPaymentBic($response).
 	                                          "<br/>Account holder: ".$this->getGingerPaymentHolderName($response).
 	                                          "<br/>City: ".$this->getGingerPaymentHolderCity($response).
 	                                          "<br/>Country: ".$this->getGingerPaymentHolderCountry($response)
             ));
-            $this->emptyCart(null, $virtuemart_ems_order_id);
+            $this->emptyCart(null, $virtuemart_order_id);
             vRequest::setVar('html', $html);
             return true;
         }

@@ -398,15 +398,15 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
 
         $this->storePSPluginInternalData($dbValues);
 
-        $virtuemart_ems_order_id = $this->getOrderIdByGingerOrder($response['id']);
+        $virtuemart_order_id = $this->getOrderIdByGingerOrder($response['id']);
         $virtuemart_order_number = $this->getOrderNumberByGingerOrder(vRequest::get('order_id'));
 
-        $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_ems_order_id);
+        $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_order_id);
 
         $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_number) . "</p>";
         if ($statusSucceeded) {
             $this->clearSessionData();
-            $this->emptyCart(null, $virtuemart_ems_order_id);
+            $this->emptyCart(null, $virtuemart_order_id);
             $html .= "<p>". JText::_('EMSPAY_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
             vRequest::setVar('html', $html);
             return true;
