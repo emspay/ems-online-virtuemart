@@ -168,14 +168,14 @@ class plgVmPaymentEmspaypayconiq extends EmspayVmPaymentPlugin
 
         $gingerOrder = $this->getGingerClient()->getOrder(vRequest::get('order_id'));
 
-        $virtuemart_order_id = $this->getOrderIdByGingerOrder(vRequest::get('order_id'));
+        $virtuemart_ems_order_id = $this->getOrderIdByGingerOrder(vRequest::get('order_id'));
         $virtuemart_order_number = $this->getOrderNumberByGingerOrder(vRequest::get('order_id'));
 
-        $statusSucceeded = $this->updateOrder($gingerOrder['status'], $virtuemart_order_id);
+        $statusSucceeded = $this->updateOrder($gingerOrder['status'], $virtuemart_ems_order_id);
 
         $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_number) . "</p>";
         if ($statusSucceeded) {
-            $this->emptyCart(null, $virtuemart_order_id);
+            $this->emptyCart(null, $virtuemart_ems_order_id);
             $html .= "<p>". JText::_('EMSPAY_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
             vRequest::setVar('html', $html);
             return true;
