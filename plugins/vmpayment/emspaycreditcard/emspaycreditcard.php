@@ -151,7 +151,7 @@ class plgVmPaymentEmspaycreditcard extends EmspayVmPaymentPlugin
      * @return bool|null|string
      * @since v1.0.0
      */
-    public function plgVmOnPaymentResponseReceived(&$virtuemart_order_id, &$html)
+    public function plgVmOnPaymentResponseReceived(&$html, &$payment_reponse)
     {
         if (!($method = $this->getVmPluginMethod(vRequest::getInt('pm')))) {
             return null; // Another method was selected, do nothing
@@ -175,7 +175,7 @@ class plgVmPaymentEmspaycreditcard extends EmspayVmPaymentPlugin
         $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_number) . "</p>";
 
         if ($statusSucceeded) {
-            $html .= "<p>". JText::_('EMSPAY_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
+            $payment_reponse.="<br>"."Paid with ".$this->getDataByOrderId($virtuemart_order_id)->payment_name;            vRequest::setVar('html', $html);
             $this->emptyCart(null, $virtuemart_order_id);
             vRequest::setVar('html', $html);
             return true;
