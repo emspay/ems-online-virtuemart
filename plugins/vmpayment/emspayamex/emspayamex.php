@@ -147,7 +147,7 @@ class plgVmPaymentEmspayamex extends EmspayVmPaymentPlugin
     /**
      * Handle payment response
      *
-     * @param int $virtuemart_order_id
+     * @param string $payment_reponse
      * @param string $html
      * @return bool|null|string
      * @since v1.0.0
