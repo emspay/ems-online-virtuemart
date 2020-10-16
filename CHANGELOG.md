@@ -36,3 +36,4 @@
 * Klarna-Pay-Later: Remove fields gender and birthday from checkout form and customer object
 * Added the ability for AfterPay to be available in the selected countries.
 * Replaced locally stored ginger-php library on composer library installer.
+* Fixes bug with wrong call after return url.
