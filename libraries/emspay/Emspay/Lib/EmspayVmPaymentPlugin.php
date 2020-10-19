@@ -2,7 +2,7 @@
 
 namespace Emspay\Lib;
 
-require_once(JPATH_LIBRARIES . '/emspay/ginger-php/vendor/autoload.php');
+require_once(JPATH_LIBRARIES . '/emspay/vendor/autoload.php');
 
 use Ginger\Ginger;
 
@@ -222,7 +222,7 @@ abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
     }
     
     /**
-     * fetch vm order id form hte payment table
+     * fetch vm order id for the payment table
      * 
      * @param type $gingerOrderId
      * @return int
@@ -239,7 +239,25 @@ abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
         }
         return 0;
     }
-    
+
+    /**
+     * fetch vm order number for the payment table
+     *
+     * @param type $gingerOrderId
+     * @return string
+     * @since v1.0.0
+     */
+    protected function getOrderNumberByGingerOrder($gingerOrderId)
+    {
+        $query = "SELECT `order_number` FROM " . $this->_tablename . "  WHERE `ginger_order_id` = '" . $gingerOrderId . "'";
+        $db = \JFactory::getDBO();
+        $db->setQuery($query);
+        $r = $db->loadObject();
+        if (is_object($r)) {
+            return (string) $r->order_number;
+        }
+        return 0;
+    }
     
     /**
      * Create a client instance

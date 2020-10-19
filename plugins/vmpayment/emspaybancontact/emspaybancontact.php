@@ -17,7 +17,7 @@ use Emspay\Lib\EmspayVmPaymentPlugin;
  * @category    Ginger
  * @package     Ginger Virtuemart
  * @author      Ginger Payments B.V. (plugins@gingerpayments.com)
- * @version     v1.1.0
+ * @version     v1.3.0
  * @copyright   COPYRIGHT (C) 2018 GINGER PAYMENTS B.V.
  * @license     The MIT License (MIT)
  * @since       v1.0.0
@@ -29,7 +29,7 @@ if (!class_exists('vmPSPlugin')) {
 }
 
 JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
-JImport('emspay.ginger-php.vendor.autoload');
+JImport('emspay.vendor.autoload');
 JImport('emspay.emspayhelper');
 
 class plgVmPaymentEmspaybancontact extends EmspayVmPaymentPlugin
@@ -87,7 +87,7 @@ class plgVmPaymentEmspaybancontact extends EmspayVmPaymentPlugin
                         \EmspayHelper::getLocale(),
                         filter_var(\JFactory::getApplication()->input->server->get('REMOTE_ADDR'), FILTER_VALIDATE_IP)
         );
-        $plugin = ['plugin' => EmspayHelper::getPluginVersion($this->_name)];
+        $plugin = ['plugin' => EmspayHelper::getPluginVersion()];
         $webhook =$this->getWebhookUrl(intval($order['details']['BT']->virtuemart_paymentmethod_id));
       
         try {
@@ -147,12 +147,12 @@ class plgVmPaymentEmspaybancontact extends EmspayVmPaymentPlugin
     /**
      * Handle payment response
      *
-     * @param int $virtuemart_order_id
+     * @param string $payment_reponse
      * @param string $html
      * @return bool|null|string
      * @since v1.0.0
      */
-    public function plgVmOnPaymentResponseReceived(&$virtuemart_order_id, &$html)
+    public function plgVmOnPaymentResponseReceived(&$html, &$payment_reponse)
     {
         if (!($method = $this->getVmPluginMethod(vRequest::getInt('pm')))) {
             return null; // Another method was selected, do nothing
@@ -172,12 +172,13 @@ class plgVmPaymentEmspaybancontact extends EmspayVmPaymentPlugin
         $gingerOrder = $this->getGingerClient()->getOrder(vRequest::get('order_id'));
 
         $virtuemart_order_id = $this->getOrderIdByGingerOrder(vRequest::get('order_id'));
+        $virtuemart_order_number = $this->getOrderNumberByGingerOrder(vRequest::get('order_id'));
         $statusSucceeded = $this->updateOrder($gingerOrder['status'], $virtuemart_order_id);
         
-        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>";
+        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_number) . "</p>";
         if ($statusSucceeded) {
             $this->emptyCart(null, $virtuemart_order_id);
-            $html .= "<p>". JText::_('EMSPAY_LIB_THANK_YOU_FOR_YOUR_ORDER'). "</p>";
+            $payment_reponse.="<br>"."Paid with ".$this->getDataByOrderId($virtuemart_order_id)->payment_name;            vRequest::setVar('html', $html);
             vRequest::setVar('html', $html);
             return true;
         }
