@@ -39,7 +39,7 @@ class EmspayHelper
      * @return string
      * @since v1.0.0
      */
-    public static function getPluginVersion($name)
+    public static function getPluginVersion()
     {
         $xml = JFactory::getXML(JPATH_SITE."/administrator/manifests/libraries/emspay.xml");
 
@@ -72,7 +72,7 @@ class EmspayHelper
      * @return bool|string
      */
     public static function getCaCertPath(){
-	  return realpath(JPATH_LIBRARIES . '/emspay/ginger-php/assets/cacert.pem');
+	  return realpath(JPATH_LIBRARIES . '/emspay/assets/cacert.pem');
     }
 
     /**

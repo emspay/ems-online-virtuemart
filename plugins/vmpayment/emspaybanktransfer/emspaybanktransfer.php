@@ -17,7 +17,7 @@ use Emspay\Lib\EmspayVmPaymentPlugin;
  * @category    Ginger
  * @package     Ginger Virtuemart
  * @author      Ginger Payments B.V. (plugins@gingerpayments.com)
- * @version     v1.2.1
+ * @version     v1.3.0
  * @copyright   COPYRIGHT (C) 2018 GINGER PAYMENTS B.V.
  * @license     The MIT License (MIT)
  * @since       v1.0.0
@@ -29,7 +29,7 @@ if (!class_exists('vmPSPlugin')) {
 }
 
 JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
-JImport('emspay.ginger-php.vendor.autoload');
+JImport('emspay.vendor.autoload');
 JImport('emspay.emspayhelper');
 
 class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
@@ -139,6 +139,7 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
         $this->storePSPluginInternalData($dbValues);
 
         $virtuemart_order_id = $this->getOrderIdByGingerOrder($response['id']);
+        $virtuemart_order_number = $this->getOrderNumberByGingerOrder(vRequest::get('order_id'));
         $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_order_id);
 
         if ($statusSucceeded) {
@@ -156,7 +157,7 @@ class plgVmPaymentEmspaybanktransfer extends EmspayVmPaymentPlugin
             vRequest::setVar('html', $html);
             return true;
         }
-        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>".
+        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_number) . "</p>".
                 "<p>" . JText::_("EMSPAY_LIB_ERROR_STATUS") . "</p>";
         $this->processFalseOrderStatusResponse($html);
     }

@@ -17,7 +17,7 @@ use Emspay\Lib\EmspayVmPaymentPlugin;
  * @category    Ginger
  * @package     Ginger Virtuemart
  * @author      Ginger Payments B.V. (plugins@gingerpayments.com)
- * @version     v1.2.1
+ * @version     v1.3.0
  * @copyright   COPYRIGHT (C) 2018 GINGER PAYMENTS B.V.
  * @license     The MIT License (MIT)
  * @since       v1.1.0
@@ -29,7 +29,7 @@ if (!class_exists('vmPSPlugin')) {
 }
 
 JLoader::registerNamespace('Emspay', JPATH_LIBRARIES . '/emspay');
-JImport('emspay.ginger-php.vendor.autoload');
+JImport('emspay.vendor.autoload');
 JImport('emspay.emspayhelper');
 
 class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
@@ -124,6 +124,7 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
     /**
      * checks is user form allowed countries
      *
+     * @param string $country
      * @return boolean
      * @since v1.1.0
      */
@@ -194,8 +195,12 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
      */
     public function plgVmOnCheckoutCheckDataPayment(VirtueMartCart $cart)
     {
-        if(!$this->userIsFromAllowedCountries($cart->BTaddress['fields']['virtuemart_country_id']['country_2_code'])) {
-            return false;
+        if($cart->cartData['paymentName'] == '<span class="vmpayment_name">AfterPay</span>'){
+            if(!$this->userIsFromAllowedCountries($cart->BTaddress['fields']['virtuemart_country_id']['country_2_code'])) {
+                return false;
+            }
+        } else {
+            return null;
         }
 
         if (!$this->selectedThisByMethodId($cart->virtuemart_paymentmethod_id)) {
@@ -208,18 +213,28 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
         
         $app = JFactory::getApplication();
         $dob = $app->getSession()->get('emspayafterpay_dob', null, 'vm');
-        if ($this->isValidDate($dob) === false) {
+        if ($dob === null) {
             $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_INVALID_DATE_ERROR"), 'error');
-            $app->getSession()->clear('emspayafterpay_dob', 'vm');
-            $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
+        } else {
+            if ($this->isValidDate($dob) === false) {
+                $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_INVALID_DATE_ERROR"), 'error');
+                $app->getSession()->clear('emspayafterpay_dob', 'vm');
+                $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
+                return false;
+            }
         }
         $tc = $app->getSession()->get('emspayafterpay_terms_and_confditions', null, 'vm');
-        if ($tc != 'on') {
+        if ($tc == null ) {
             $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_PLEASE_ACCEPT_TC"), 'error');
-            $app->getSession()->clear('emspayafterpay_terms_and_confditions', 'vm');
-            $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
+        } else {
+            if ($tc != 'on') {
+                $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_PLEASE_ACCEPT_TC"), 'error');
+                $app->getSession()->clear('emspayafterpay_terms_and_confditions', 'vm');
+                $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
+                return false;
+            }
         }
         return true;
     }
@@ -384,10 +399,11 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
         $this->storePSPluginInternalData($dbValues);
 
         $virtuemart_order_id = $this->getOrderIdByGingerOrder($response['id']);
+        $virtuemart_order_number = $this->getOrderNumberByGingerOrder(vRequest::get('order_id'));
 
         $statusSucceeded = $this->updateOrder($response['status'], $virtuemart_order_id);
 
-        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_id) . "</p>";
+        $html = "<p>" . EmspayHelper::getOrderDescription($virtuemart_order_number) . "</p>";
         if ($statusSucceeded) {
             $this->clearSessionData();
             $this->emptyCart(null, $virtuemart_order_id);
