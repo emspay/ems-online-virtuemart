@@ -213,28 +213,20 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
         
         $app = JFactory::getApplication();
         $dob = $app->getSession()->get('emspayafterpay_dob', null, 'vm');
-        if ($dob === null) {
+
+        if ($this->isValidDate($dob) === false || $dob === null) {
             $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_INVALID_DATE_ERROR"), 'error');
+            $app->getSession()->clear('emspayafterpay_dob', 'vm');
+            $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
-        } else {
-            if ($this->isValidDate($dob) === false) {
-                $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_INVALID_DATE_ERROR"), 'error');
-                $app->getSession()->clear('emspayafterpay_dob', 'vm');
-                $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
-                return false;
-            }
         }
+
         $tc = $app->getSession()->get('emspayafterpay_terms_and_confditions', null, 'vm');
-        if ($tc == null ) {
+        if ($tc != 'on' || $tc == null) {
             $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_PLEASE_ACCEPT_TC"), 'error');
+            $app->getSession()->clear('emspayafterpay_terms_and_confditions', 'vm');
+            $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
             return false;
-        } else {
-            if ($tc != 'on') {
-                $app->enqueueMessage(JText::_("PLG_VMPAYMENT_EMSPAYAFTERPAY_MESSAGE_PLEASE_ACCEPT_TC"), 'error');
-                $app->getSession()->clear('emspayafterpay_terms_and_confditions', 'vm');
-                $app->redirect(JRoute::_('index.php?option=com_virtuemart&view=cart&task=editpayment', false));
-                return false;
-            }
         }
         return true;
     }
@@ -375,6 +367,11 @@ class plgVmPaymentEmspayafterpay extends EmspayVmPaymentPlugin
         }
 
         if ($response['status'] == 'error') {
+            $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response['transactions'][0]['reason']."</p>";
+            $this->processFalseOrderStatusResponse($html);
+        }
+
+        if (array_key_exists('reason', $response['transactions'][0] )) {
             $html = "<p>" . JText::_("EMSPAY_LIB_ERROR_TRANSACTION") . "</p><p>Error: ".$response['transactions'][0]['reason']."</p>";
             $this->processFalseOrderStatusResponse($html);
         }
