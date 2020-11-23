@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="plugin" version="3.0" method="upgrade" group="vmpayment">
     <name>EMS Online - WeChat</name>
-    <creationDate>08/21/2020</creationDate>
+    <creationDate>11/24/2020</creationDate>
     <author>Ginger Payments</author>
     <authorEmail>plugins@gingerpayments.com</authorEmail>
     <authorUrl>https://www.gingerpayments.com</authorUrl>
@@ -22,11 +22,7 @@
                 <field name="EMSPAY_LIB_BUNDLE_CA_CERT" type="radio" default="1" label="EMSPAY_LIB_BUNDLE_CA_CERT_TITLE" description="EMSPAY_LIB_BUNDLE_CA_CERT_EXPLAIN">
                     <option value="0">EMSPAY_LIB_NO</option>
                     <option value="1">EMSPAY_LIB_YES</option>
-                </field> 
-                <field name="EMSPAY_ALLOW_NOTIFICATIONS_FROM_X" type="radio" default="1" label="EMSPAY_ALLOW_NOTIFICATIONS_FROM_X_TITLE" description="EMSPAY_ALLOW_NOTIFICATIONS_FROM_X_EXPLAIN">
-                    <option value="0">EMSPAY_LIB_NO</option>
-                    <option value="1">EMSPAY_LIB_YES</option>
-                </field> 
+                </field>
                 <field name="EMSPAY_STATUS_NEW" type="vmorderstate" scope="com_virtuemart" default="P" label="EMSPAY_STATUS_NEW_TITLE" description="EMSPAY_STATUS_NEW_EXPLAIN" />
                 <field name="EMSPAY_STATUS_PROCESSING" type="vmorderstate" scope="com_virtuemart" default="P" label="EMSPAY_STATUS_PROCESSING_TITLE" description="EMSPAY_STATUS_PROCESSING_EXPLAIN" />
                 <field name="EMSPAY_STATUS_ERROR"  type="vmorderstate" scope="com_virtuemart" default="X" label="EMSPAY_STATUS_ERROR_TITLE" description="EMSPAY_STATUS_ERROR_EXPLAIN" />
