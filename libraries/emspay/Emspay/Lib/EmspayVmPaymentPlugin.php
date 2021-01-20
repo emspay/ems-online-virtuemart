@@ -201,8 +201,11 @@ abstract class EmspayVmPaymentPlugin extends \vmPSPlugin
             case 'expired':
                 $this->updateOrderStatus($this->methodParametersFactory()->statusExpired(), $virtuemart_order_id);
                 return false;
+            case 'captured':
+                $this->updateOrderStatus($this->methodParametersFactory()->statusCaptured(), $virtuemart_order_id);
+                return false;
             default:
-                die("Should not happen");
+                die("Status can't be mapped with EMS statuses");
         }
     }
 
