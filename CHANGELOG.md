@@ -40,5 +40,5 @@
 
 ** 1.3.1 **
 
-* Removed WebbHook option from all payment.
+* Removed Webhook option from all payment.
 * Updated Plugin description. 
